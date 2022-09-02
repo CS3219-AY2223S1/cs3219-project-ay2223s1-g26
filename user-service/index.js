@@ -14,7 +14,7 @@ const router = express.Router()
 router.get('/', (_, res) => res.send('Hello World from user-service'))
 router.post('/', createUser)
 
-app.use('/api/users', router).all((_, res) => {
+app.use('/api/user', router).all((_, res) => {
   res.setHeader('content-type', 'application/json')
   res.setHeader('Access-Control-Allow-Origin', '*')
 })
