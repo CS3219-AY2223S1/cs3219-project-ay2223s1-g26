@@ -1,5 +1,5 @@
 import {BrowserRouter as Router, Routes, Route, Navigate} from "react-router-dom";
-import SignupPage from './pages/SignupPage';
+import SignupPage from './components/SignupPage';
 import {Box} from "@mui/material";
 
 function App() {
