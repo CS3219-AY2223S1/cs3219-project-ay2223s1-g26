@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Link } from "react-router-dom";
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -15,11 +16,9 @@ import AdbIcon from '@mui/icons-material/Adb';
 
 const pages = ['Signup', 'Login'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
-
 function NavBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const [user, setUser] = React.useState({})
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -90,7 +89,13 @@ function NavBar() {
             >
               {pages.map((page) => (
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
+                  <Typography textAlign="center">
+                  <Link 
+                    style={{ textDecoration: "none", color: "black" }}
+                    to={`/${page}`}>
+                    {page}
+                  </Link>
+                  </Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -121,7 +126,11 @@ function NavBar() {
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
-                {page}
+                <Link 
+                  style={{ textDecoration: "none", color: "white" }}
+                  to={`/${page}`}>
+                  {page}
+                </Link>
               </Button>
             ))}
           </Box>

@@ -55,7 +55,7 @@ function LoginPage() {
 
   return (
     <Box display={"flex"} flexDirection={"column"} width={"30%"}>
-      <Typography variant={"h3"} marginBottom={"2rem"}>Sign Up</Typography>
+      <Typography variant={"h3"} marginBottom={"2rem"}>Log in</Typography>
       <TextField
         label="Username"
         variant="standard"

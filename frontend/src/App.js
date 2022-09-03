@@ -1,5 +1,6 @@
 import {BrowserRouter as Router, Routes, Route, Navigate} from "react-router-dom";
 import SignupPage from './pages/SignupPage';
+import LoginPage from './pages/LoginPage'
 import NavBar from './components/NavBar'
 import {Box} from "@mui/material";
 
@@ -8,12 +9,11 @@ function App() {
     <div className="App">
       <NavBar/>
       <Box display={"flex"} flexDirection={"column"} padding={"4rem"}>
-        <Router>
-          <Routes>
-            <Route exact path="/" element={<Navigate replace to="/signup" />}></Route>
-            <Route path="/signup" element={<SignupPage/>}/>
-          </Routes>
-        </Router>
+        <Routes>
+          <Route exact path="/" element={<Navigate replace to="/signup" />}></Route>
+          <Route path="/signup" element={<SignupPage/>}/>
+          <Route path="/login" element={<LoginPage/>}/>
+        </Routes>
       </Box>
     </div>
   );
