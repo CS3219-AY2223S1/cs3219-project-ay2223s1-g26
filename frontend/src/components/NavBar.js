@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -13,12 +13,38 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "../firebase";
+import { signOut } from "firebase/auth";
+import { userContext } from '../userContext';
 
-const pages = ['Signup', 'Login'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 function NavBar() {
+  const value = React.useContext(userContext)
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [user, loading, error] = useAuthState(auth);
+  const navigate = useNavigate();
+  const pages = user
+    ? ['Dashboard', 'Practice']
+    : ['Login'];
+
+  const settings = ['Logout'];
+  
+  React.useEffect(() => {
+    if (loading) {
+      // maybe trigger a loading screen
+      return;
+    }
+    if (user) {
+      navigate("/dashboard");
+    }
+  }, [user, loading]);
+
+  React.useEffect(() => {
+    if (!user) {
+      navigate("/login");
+    }
+  }, [user]);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -26,14 +52,17 @@ function NavBar() {
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
-
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
-
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+  const handleLogout = () => {
+    handleCloseUserMenu()
+    signOut(auth)
+    navigate('/')
+  }
 
   return (
     <AppBar position="static">
@@ -117,7 +146,7 @@ function NavBar() {
               textDecoration: 'none',
             }}
           >
-            LOGO
+            PeerPrep
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
@@ -135,10 +164,10 @@ function NavBar() {
             ))}
           </Box>
 
-          <Box sx={{ flexGrow: 0 }}>
+          { user && <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <Avatar src={ user.photoURL } />
               </IconButton>
             </Tooltip>
             <Menu
@@ -158,12 +187,12 @@ function NavBar() {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                <MenuItem key={setting} onClick={handleLogout}>
                   <Typography textAlign="center">{setting}</Typography>
                 </MenuItem>
               ))}
             </Menu>
-          </Box>
+          </Box> }
         </Toolbar>
       </Container>
     </AppBar>

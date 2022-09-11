@@ -22,6 +22,20 @@ async function onboard(admin, res, uid, name, email) {
   return userAccount
 }
 
+async function getUser(res, admin, uid) {
+  try {
+    const userSnapshot = await admin.firestore().collection('users').doc(uid).get()
+    const firestoreUser = Object.assign({
+      id: userSnapshot.id
+    }, userSnapshot.data())
+    res.status(200).send(firestoreUser)
+  } catch (e) {
+    functions.logger.error(e)
+    res.status(500).send(e)
+  }
+  return
+}
+
 module.exports = {
   _404(req, res) {
     res.status(404).send({
@@ -47,6 +61,9 @@ module.exports = {
         })
         return
       }
+    } else if (req.params.route === 'getUser') {
+      await getUser(res, admin, uid)
+      return
     } else {
       res.status(404).send('Not found')
       return
