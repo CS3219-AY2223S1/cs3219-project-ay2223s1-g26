@@ -1,11 +1,7 @@
-# CS3219-AY22-23-Project-Skeleton
-
-This is a template repository for CS3219 project.
+# CS3219-AY22-23 G26
 
 ## User Service
-1. Rename `.env.sample` file to `.env`.
-2. Create a Cloud DB URL using Mongo Atlas.
-3. Enter the DB URL created as `DB_CLOUD_URI` in `.env` file.
+1. Install firebase using ` npm install -g firebase-tools`
 4. Install npm packages using `npm i`.
 5. Run User Service using `npm run dev`.
 
