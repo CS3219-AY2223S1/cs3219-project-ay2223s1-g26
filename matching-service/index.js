@@ -18,7 +18,9 @@ app.use(cors()) //config cors so that front-end can use
 app.options('*', cors())
 
 const httpServer = createServer(app);
-const io = new Server(httpServer);
+const io = new Server(httpServer, {cors: {
+    origin: "*",
+  }},);
 
 const socketMap = new Map();
 
