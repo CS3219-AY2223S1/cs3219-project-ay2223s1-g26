@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
+import CommonEditor from "../components/CommonEditor";
+
 function Practice() {
   return (
     <div>
-      <h1>Practice Placeholder</h1>
+      <CommonEditor />
     </div>
   );
 }

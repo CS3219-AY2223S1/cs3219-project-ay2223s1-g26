@@ -2,6 +2,8 @@ import * as React from "react";
 import { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
+import Editor from "@monaco-editor/react";
+
 const { io } = require("socket.io-client");
 
 // Only for dev environment, to simulate 2 clients
@@ -65,6 +67,13 @@ const CommonEditor = () => {
           value={textValue}
         />
       </div>
+      <Editor
+        height="90vh"
+        defaultLanguage="javascript"
+        defaultValue="// some comment"
+        onChange={handleChangeEmitted}
+        value={textValue}
+      />
     </Box>
   );
 };
