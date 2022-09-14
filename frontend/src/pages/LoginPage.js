@@ -33,8 +33,7 @@ function Login() {
             Log in to PeerPrep
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Lizards are a widespread group of squamate reptiles, with over 6,000
-            species, ranging across all continents except Antarctica
+            Practice solving interview style coding problems with peerprep today to get your dream job tomorrow!
           </Typography>
         </CardContent>
         <CardActions style={{justifyContent: 'center'}}>
