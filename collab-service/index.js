@@ -13,7 +13,9 @@ io.on("connection", (socket) => {
   // });
   socket.on("match", (args) => {
     console.log(args);
-    socket.on(args.USER_ID, (msg) => {
+    console.log("Room: ", args.ROOM_ID);
+    socket.join(args.ROOM_ID); // join specific room
+    socket.on("text", (msg) => {
       io.emit(args.USER_ID, msg);
       console.log("msg: ", msg);
     });

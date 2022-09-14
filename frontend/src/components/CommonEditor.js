@@ -1,8 +1,8 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
 import Editor from "@monaco-editor/react";
+import LANGUAGES from "../resources/languages";
+import "./CommonEditor.css";
 
 const { io } = require("socket.io-client");
 
@@ -10,22 +10,34 @@ const { io } = require("socket.io-client");
 let USER_ID;
 let PARTNER_ID;
 
-if (process.env.REACT_APP_ENV === "dev_1") {
-  USER_ID = process.env.REACT_APP_USER1;
-  PARTNER_ID = process.env.REACT_APP_USER2;
-} else if (process.env.REACT_APP_ENV === "dev_2") {
-  USER_ID = process.env.REACT_APP_USER2;
-  PARTNER_ID = process.env.REACT_APP_USER1;
-}
+const CommonEditor = ({ uuid1, uuid2, roomid, difficulty }) => {
+  // Determine user and partner ID to use based on environment
+  if (process.env.REACT_APP_ENV === "dev_1") {
+    USER_ID = process.env.REACT_APP_USER1;
+    PARTNER_ID = process.env.REACT_APP_USER2;
+  } else if (process.env.REACT_APP_ENV === "dev_2") {
+    USER_ID = process.env.REACT_APP_USER2;
+    PARTNER_ID = process.env.REACT_APP_USER1;
+  } else if (process.env.REACT_APP_ENV === "prod_1") {
+    USER_ID = uuid1;
+    PARTNER_ID = uuid2;
+  } else if (process.env.REACT_APP_ENV === "prod_2") {
+    USER_ID = uuid2;
+    PARTNER_ID = uuid1;
+  }
 
-const CommonEditor = () => {
+  // TODO: temporary
+  const ROOM_ID = process.env.REACT_APP_ENV === "dev_3" ? 12342 : 12345;
+
   const [textValue, setTextValue] = useState("");
   const [clientSocket, setClientSocket] = useState();
   useEffect(() => {
-    let socket = io("http://localhost:8080");
+    let socket = io("https://git.heroku.com/hidden-reaches-56374.git", {
+      withCredentials: true,
+    });
     socket.on("connect", () => {
       console.log(socket.id);
-      socket.emit("match", { USER_ID, PARTNER_ID });
+      socket.emit("match", { USER_ID, PARTNER_ID, ROOM_ID });
     });
     socket.on(PARTNER_ID, handleChangeReceived);
     socket.on("confirmed", console.log("confirmed"));
@@ -33,13 +45,10 @@ const CommonEditor = () => {
   }, []);
 
   const handleChangeEmitted = (text) => {
-    console.log("change emitted: ", text.target.value);
-    console.log(
-      "caret position: ",
-      document.getElementById("editor").selectionEnd
-    );
-    setTextValue(text.target.value);
-    clientSocket.emit(USER_ID, text.target.value);
+    console.log(text);
+    console.log("change emitted: ", text);
+    setTextValue(text);
+    clientSocket.emit("text", text);
   };
 
   const handleChangeReceived = (text) => {
@@ -48,33 +57,16 @@ const CommonEditor = () => {
   };
 
   return (
-    <Box
-      component="form"
-      sx={{
-        "& .MuiTextField-root": { m: 1, width: "25ch" },
-      }}
-      noValidate
-      autoComplete="off"
-    >
-      <div>
-        <TextField
-          id="editor"
-          label="Multiline"
-          multiline
-          rows={4}
-          defaultValue="Default Value"
-          onInput={handleChangeEmitted}
-          value={textValue}
-        />
-      </div>
+    <div className="commoneditorContainer">
       <Editor
-        height="90vh"
+        height="85vh"
         defaultLanguage="javascript"
-        defaultValue="// some comment"
+        defaultValue="Type your code here"
+        theme="vs-dark"
         onChange={handleChangeEmitted}
         value={textValue}
       />
-    </Box>
+    </div>
   );
 };
 
