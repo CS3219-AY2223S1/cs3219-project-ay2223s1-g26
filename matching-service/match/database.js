@@ -1,11 +1,18 @@
 import { Sequelize, Model, DataTypes} from "sequelize";
 import { getTime } from './time.js'
+import { config } from 'dotenv'
 
-const user = 'local';
-const host = 'localhost';
-const database = 'matchdb'
-const password = 'local'
-const port = '5432'
+if (process.env.NODE_ENV !== 'production') { 
+    config(); 
+} 
+
+const user = process.env.AWS_DB_USER;
+const host = process.env.AWS_DB_ENDPOINT;
+const database = process.env.AWS_DB;
+const password = process.env.AWS_DB_PASSWORD;
+const port = process.env.AWS_DB_PORT;
+
+console.log(user);
 
 export class Waiting extends Model {
 }
@@ -96,6 +103,7 @@ export async function getMatchQuery(uuidField, difficultyField) {
         return null;
     }
     const partnerUuid = waitingUsers.at(0).getDataValue('uuid');
+    console.log(partnerUuid);
     const partner = await deleteWaitingQuery(partnerUuid);
     if (partner == null) {
         return null;

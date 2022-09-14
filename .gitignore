@@ -8,4 +8,5 @@ user-service/.env.json
 frontend/.env.json
 frontend/node_modules/
 frontend/src/.env.json
+.env
 

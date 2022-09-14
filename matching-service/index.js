@@ -32,10 +32,12 @@ io.on("connection", (socket) => {
         console.log("socket " + socket.id + " registered, with id: " + uuidField);
     })
     socket.on('getMatch', async function(uuidField, difficultyField) {
+        console.log("getMatch called with uuid: " +  uuidField + " and difficulty: " + difficultyField);
         const partner = await getMatchQuery(uuidField, difficultyField);
-        const partnerUuid = partner[1];
+        console.log(partner);
         if (partner != null) {
-            roomUuid = uuidv4();
+            var roomUuid = uuidv4();
+            const partnerUuid = partner[1];
             socket.emit("matchFound", uuidField, partnerUuid, roomUuid);
             const partnerSocketId = socketMap.get(uuidField);
             socket.to(partnerSocketId).emit("matchFound", partnerSocketId, uuidField, roomUuid)

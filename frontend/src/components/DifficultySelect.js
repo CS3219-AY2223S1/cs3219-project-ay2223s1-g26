@@ -4,8 +4,10 @@ import {
     Grid,
     Typography,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useContext } from "react";
 import { io } from "socket.io-client";
+import { useNavigate } from "react-router-dom";
+import { userContext } from '../userContext';
 
 const Difficulty = {
     Easy: "easy",
@@ -14,34 +16,79 @@ const Difficulty = {
 }
 
 var msSocket;
-var difficulty;
+var timer; 
+
 
 //Can implement a stepper here
 function DifficultySelect() { 
-    const [isConnected, setIsConnected] = useState();
-    useEffect(() => {
+    const [difficulty, setDifficulty] = useState();
+    const [isConnecting, setIsConnecting] = useState(false);
+    const [isMatched, setIsMatched] = useState(false);
+    const [partnerUuid, setPartnerUuid] = useState();
+    const [roomUuid, setRoomUuid] = useState();
+
+    const user = useContext(userContext)
+
+    useEffect(() => {{
         msSocket = io('http://localhost:3000');
 
         msSocket.on("connected", () => {
             console.log("connected to match service!");
-            msSocket.emit("register", "insertUuidHere");
-            setIsConnected(true);
-            console.log(isConnected);
+            msSocket.emit("register", "testUuid");
         })
 
         msSocket.on("matchFound", (uuidField, partnerUuid, roomUuid) => {
-            //connect to collaboration service with the above fields
+            clearTimeout(timer);
+            setIsMatched(true);
+            setPartnerUuid(partnerUuid)
+            setRoomUuid(roomUuid)
+            msSocket.emit("deregister");
         })
 
         msSocket.on("deregister_success", () => {
-            console.log("deregister_success");
+            console.log("deregister_success")
+            setIsConnecting(false);
+            if (isMatched) {
+                routeToPractice();
+            }
         })
     
         msSocket.on("deregister_failed", () => {
-            msSocket.emit("deregister")
+            msSocket.emit("deregister");
         })
+    }});
 
+    //Difficulty hook
+    useEffect(() => {
+        console.log(difficulty);
+        setIsConnecting(true);
+        msSocket.emit("getMatch", "testId", difficulty);
+    }, [difficulty])
+
+    //Connecting hook
+    useEffect(() => {
+        console.log("isConnecting: " + isConnecting);
+        if (isConnecting) {
+            timer = setTimeout(() => {
+                setIsConnecting(false);
+            }, 30000)
+            //Disable the buttons
+            //Start loading spinner
+        } else {
+            //Stop loading spinner
+            //Enable the buttons
+        }
+    },[isConnecting])
+
+    const handleDifficultyButton = useCallback((diff) => {
+        setDifficulty(diff);
     }, []);
+
+    let navigate = useNavigate();
+    const routeToPractice = () => {
+        var path = '/practice';
+        navigate(path, {replace: true, state: { uuid: "testId", partnerUuid: partnerUuid, roomUuid: roomUuid, difficulty: difficulty }});
+    } 
 
     return (
         <div>
@@ -58,9 +105,12 @@ function DifficultySelect() {
                 variant = "text" 
                 aria-label="text button group"
                 display="flex">
-                    <Button>Easy</Button>
-                    <Button>Medium</Button>
-                    <Button>Hard</Button>
+                    <Button onClick = {() => {
+                        handleDifficultyButton(Difficulty.Easy)}}>Easy</Button>
+                    <Button onClick = {() => {
+                        handleDifficultyButton(Difficulty.Medium)}}>Medium</Button>
+                    <Button onClick = {() => {
+                        handleDifficultyButton(Difficulty.Hard)}}>Hard</Button>
                 </ButtonGroup>
             </Grid>
         </div>)

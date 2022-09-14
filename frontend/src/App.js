@@ -9,9 +9,6 @@ import { userContext } from './userContext';
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "./firebase";
 
-import { useEffect, useState } from "react";
-import { io } from "socket.io-client";
-
 function App() {
   const [user, loading, error] = useAuthState(auth);
   
