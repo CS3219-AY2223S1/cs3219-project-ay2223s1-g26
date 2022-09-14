@@ -1,5 +1,4 @@
 import React, { useContext } from "react";
-import { Grid, Typography } from "@mui/material";
 import DifficultySelect from "../components/DifficultySelect";
 import { userContext } from '../userContext';
 

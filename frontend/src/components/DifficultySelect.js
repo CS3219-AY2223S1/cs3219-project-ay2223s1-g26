@@ -18,7 +18,6 @@ const Difficulty = {
 var msSocket;
 var timer; 
 
-
 //Can implement a stepper here
 function DifficultySelect() { 
     const [difficulty, setDifficulty] = useState();
@@ -27,7 +26,8 @@ function DifficultySelect() {
     const [partnerUuid, setPartnerUuid] = useState();
     const [roomUuid, setRoomUuid] = useState();
 
-    const user = useContext(userContext)
+    const user = useContext(userContext);
+    console.log(user ? user.uid : null);
 
     useEffect(() => {{
         msSocket = io('http://localhost:3000');
@@ -62,7 +62,7 @@ function DifficultySelect() {
     useEffect(() => {
         console.log(difficulty);
         setIsConnecting(true);
-        msSocket.emit("getMatch", "testId", difficulty);
+        msSocket.emit("getMatch", user ? user.uid : null, difficulty);
     }, [difficulty])
 
     //Connecting hook
@@ -87,7 +87,7 @@ function DifficultySelect() {
     let navigate = useNavigate();
     const routeToPractice = () => {
         var path = '/practice';
-        navigate(path, {replace: true, state: { uuid: "testId", partnerUuid: partnerUuid, roomUuid: roomUuid, difficulty: difficulty }});
+        navigate(path, {replace: true, state: { uuid: user ? user.uid : null, partnerUuid: partnerUuid, roomUuid: roomUuid, difficulty: difficulty }});
     } 
 
     return (
