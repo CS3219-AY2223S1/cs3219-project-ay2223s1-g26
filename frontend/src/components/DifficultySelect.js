@@ -34,32 +34,38 @@ function DifficultySelect() {
 
         msSocket.on("connected", () => {
             console.log("connected to match service!");
-            msSocket.emit("register", "testUuid");
+            msSocket.emit("register", user ? user.uid : null);
         })
 
         msSocket.on("matchFound", (uuidField, partnerUuid, roomUuid) => {
             clearTimeout(timer);
             setIsMatched(true);
             setPartnerUuid(partnerUuid)
-            setRoomUuid(roomUuid)
+            setRoomUuid(roomUuid);
             msSocket.emit("deregister");
         })
 
         msSocket.on("deregister_success", () => {
             console.log("deregister_success")
             setIsConnecting(false);
-            if (isMatched) {
-                routeToPractice();
-            }
         })
     
         msSocket.on("deregister_failed", () => {
             msSocket.emit("deregister");
         })
-    }});
+    }}, []);
+
+    useEffect(() => {{
+        if (isMatched) {
+            routeToPractice();
+        }
+    }}, [isMatched]);
 
     //Difficulty hook
     useEffect(() => {
+        if (difficulty == null) {
+            return;
+        }
         console.log(difficulty);
         setIsConnecting(true);
         msSocket.emit("getMatch", user ? user.uid : null, difficulty);
@@ -86,6 +92,7 @@ function DifficultySelect() {
 
     let navigate = useNavigate();
     const routeToPractice = () => {
+        console.log("here");
         var path = '/practice';
         navigate(path, {replace: true, state: { uuid: user ? user.uid : null, partnerUuid: partnerUuid, roomUuid: roomUuid, difficulty: difficulty }});
     } 
