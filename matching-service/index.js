@@ -39,14 +39,14 @@ io.on("connection", (socket) => {
             var roomUuid = uuidv4();
             const partnerUuid = partner[1];
             socket.emit("matchFound", uuidField, partnerUuid, roomUuid);
-            const partnerSocketId = socketMap.get(uuidField);
+            const partnerSocketId = socketMap.get(partnerUuid);
             socket.to(partnerSocketId).emit("matchFound", partnerSocketId, uuidField, roomUuid)
         }
     })
     socket.on('deregister', async function(uuidField) {
         const waitee = await deleteWaitingQuery(uuidField);
         if (waitee == null) {
-            socket.emit("deregister_failed");
+            //socket.emit("deregister_failed");
         }
         socket.emit("deregister_success");
     })
