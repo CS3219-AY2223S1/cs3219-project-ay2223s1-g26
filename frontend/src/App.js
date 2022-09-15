@@ -18,7 +18,7 @@ import backendApi from "./.env.json";
 
 function App() {
   const [user, loading, error] = useAuthState(auth);
-
+  
   return (
     <userContext.Provider value={user}>
       <div className="App">

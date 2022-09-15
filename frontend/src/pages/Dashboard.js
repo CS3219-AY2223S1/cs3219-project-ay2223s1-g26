@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import DifficultySelect from "../components/DifficultySelect";
 import { userContext } from '../userContext';
 
 function Dashboard() {
@@ -6,7 +7,8 @@ function Dashboard() {
 
   return (
     <div>
-      <h1>Welcome {user ? user.displayName : 'User'}!</h1>
+      {/* <Typography>Welcome {user ? user.displayName : 'User'}!</Typography> */}
+      <DifficultySelect/>
     </div>
   );
 }
