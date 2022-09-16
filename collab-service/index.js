@@ -5,7 +5,9 @@ const app = express();
 
 const httpServer = createServer(app);
 
-const io = new Server(httpServer, { cors: { origin: "*" } });
+const io = new Server(httpServer, {
+  cors: { origin: "*", methods: ["GET", "POST"] },
+});
 
 io.on("connection", (socket) => {
   // socket.on("private message", (targetSocket, msg) => {
@@ -16,8 +18,7 @@ io.on("connection", (socket) => {
     console.log("Room: ", args.ROOM_ID);
     socket.join(args.ROOM_ID); // join specific room
     socket.on("text", (msg) => {
-      io.emit(args.USER_ID, msg);
-      console.log("msg: ", msg);
+      io.emit("text", msg);
     });
   });
 
@@ -25,4 +26,4 @@ io.on("connection", (socket) => {
   return;
 });
 
-httpServer.listen(8080);
+httpServer.listen(8081);
