@@ -1,60 +1,67 @@
-const Question = require("./questionModel");
+import Question from "./questionModel.js";
 
-const getAllQuestions = (req, res, next) => {
-    const questions = Question.find();
+export const getAllQuestions = async (req, res, next) => {
+  const questions = await Question.find();
 
-    return res.status(200).json({
-        status: "success",
-        data: questions
-    })
-}
+  return res.status(200).json({
+    status: "success",
+    data: questions,
+  });
+};
 
-const getAllQuestionsByDifficulty = (req, res, next) => {
+export const getAllQuestionsByDifficulty = async (req, res, next) => {
+  console.log(req.query.difficulty);
+  if (!isValidQuestionDifficulty(req.query.difficulty, res)) return;
 
-    if (!isValidQuestionDifficulty(req.params.difficulty, res)) return;
+  const questions = await Question.find()
+    .where("difficulty")
+    .equals(req.query.difficulty);
 
-    const questions = Question.find().where("difficulty").equals(req.params.difficulty);
+  console.log(questions);
 
-    return res.status(200).json({
-        status: "success",
-        data: questions
-    })
-}
+  return res.status(200).json({
+    status: "success",
+    data: questions,
+  });
+};
 
-const getQuestionByID = (req, res, next) => {
-    const question = await Question.findById(req.params.id);
+export const getQuestionByID = async (req, res, next) => {
+  const question = await Question.findById(req.query.id);
 
-    return res.status(200).json({
-        status: "success",
-        data: question
-    })
-}
+  return res.status(200).json({
+    status: "success",
+    data: question,
+  });
+};
 
-const getRandomQuestionByDifficulty = (req, res, next) => {
+export const getRandomQuestionByDifficulty = async (req, res, next) => {
+  if (!isValidQuestionDifficulty(req.query.difficulty, res)) return;
 
-    if (!isValidQuestionDifficulty(req.params.difficulty, res)) return;
+  const questionsByDifficulty = await Question.find()
+    .where("difficulty")
+    .equals(req.query.difficulty);
 
-    const questionsByDifficulty = await Question.find().where("difficulty").equals(req.params.difficulty);
+  // pick a question at random
+  const randomQuestion =
+    questionsByDifficulty[
+      Math.floor(Math.random() * questionsByDifficulty.length)
+    ];
 
-    // pick a question at random
-    const randomQuestion = questionsByDifficulty[Math.floor(Math.random() * questionsByDifficulty.length)]
-
-    return res.status(200).json({
-        status: "success",
-        data: randomQuestion
-    })
-}
+  return res.status(200).json({
+    status: "success",
+    data: randomQuestion,
+  });
+};
 
 const isValidQuestionDifficulty = (difficulty, res) => {
-    const VALID_DIFFICULTIES = ["EASY", "MEDIUM", "HARD"];
-    if (!VALID_DIFFICULTIES.includes(difficulty)) {
-        return res.status(500).json({
-            status: "bad request",
-        })
-    } else {
-        return true;
-    }
-}
+  if (difficulty == null) return false;
 
-
-
+  const VALID_DIFFICULTIES = ["EASY", "MEDIUM", "HARD"];
+  if (!VALID_DIFFICULTIES.includes(difficulty)) {
+    return res.status(500).json({
+      status: "bad request",
+    });
+  } else {
+    return true;
+  }
+};

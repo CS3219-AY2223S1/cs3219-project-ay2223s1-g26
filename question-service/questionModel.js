@@ -1,5 +1,4 @@
-const mongoose = require("mongoose");
-const slugify = require("slugify");
+import mongoose from "mongoose";
 
 const questionSchema = new mongoose.Schema({
   name: {
@@ -14,8 +13,12 @@ const questionSchema = new mongoose.Schema({
     },
     required: true,
   },
+  question: {
+    type: String,
+    required: true,
+  },
 });
 
 const Question = mongoose.model("Question", questionSchema);
 
-module.exports = Question;
+export default Question;
