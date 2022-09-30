@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
-import { userContext } from '../userContext';
+import { context } from '../context';
 
 function Dashboard() {
-  const { user } = useContext(userContext)
+  const { user, setIsLoading } = useContext(context)
 
   return (
     <div>

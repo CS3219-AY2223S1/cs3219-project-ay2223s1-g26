@@ -16,32 +16,29 @@ import AdbIcon from '@mui/icons-material/Adb';
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../firebase";
 import { signOut } from "firebase/auth";
-import { userContext } from '../userContext';
+import { context } from '../context';
 
 function NavBar() {
-  const value = React.useContext(userContext)
+  const value = React.useContext(context)
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [user, loading, error] = useAuthState(auth);
   const navigate = useNavigate();
-  const pages = user
-    ? ['Dashboard', 'Practice']
-    : ['Login'];
-
+  const pages = loading
+    ? []
+    : user
+      ? ['Dashboard', 'Practice']
+      : ['Login'];
   const settings = ['Logout'];
   
   React.useEffect(() => {
-    if (loading) {
-      // maybe trigger a loading screen
-      return;
-    }
     if (user) {
       navigate("/dashboard");
     }
-  }, [user, loading]);
+  }, [user]);
 
   React.useEffect(() => {
-    if (!user) {
+    if (!user && !loading) {
       navigate("/login");
     }
   }, [user]);

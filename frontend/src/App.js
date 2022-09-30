@@ -5,7 +5,7 @@ import Dashboard from './pages/Dashboard'
 import Practice from './pages/Practice'
 import NavBar from './components/NavBar'
 import Box from '@mui/material/Box';
-import { userContext } from './userContext';
+import { context } from './context';
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "./firebase";
 import axios from "axios";
@@ -14,22 +14,37 @@ import Loader from "./components/Loader";
 
 function App() {
   const [user, loading, error] = useAuthState(auth);
+  const [ isLoading, setIsLoading ] = React.useState(false)
+  React.useEffect(() => {
+    setIsLoading(loading)
+  }, [loading])
   return (
     <div>
-    { !user || loading ? <Loader/> :
-      <userContext.Provider value={{user, loading}}>
+    {isLoading && <Loader/> }
+      <context.Provider value={{
+        user,
+        isLoading,
+        setIsLoading
+      }}>
         <div className="App">
           <NavBar/>
-          <Box display={"flex"} flexDirection={"column"} padding={"4rem"}>
-            <Routes>
-              <Route path="/login" element={<LoginPage/>}/>
-              <Route path="/dashboard" element={<Dashboard/>}/>
-              <Route path="/practice" element={<Practice/>}/>
-            </Routes>
-          </Box>
+          { user
+            ? <Box display={"flex"} flexDirection={"column"} padding={"4rem"}>
+                <Routes>
+                  <Route path="/dashboard" element={<Dashboard/>}/>
+                  <Route path="/practice" element={<Practice/>}/>
+                  <Route path="/" element={<Navigate replace to="/dashboard" />} />
+                </Routes>
+              </Box>
+            : <Box display={"flex"} flexDirection={"column"} padding={"4rem"}>
+                <Routes>
+                  <Route path="/login" element={<LoginPage/>}/>
+                  <Route path="/" element={<Navigate replace to="/login" />} />
+                </Routes>
+              </Box>
+          }
         </div>
-      </userContext.Provider>
-    }
+      </context.Provider>
     </div>
   );
 }
