@@ -4,29 +4,33 @@ import LoginPage from './pages/LoginPage'
 import Dashboard from './pages/Dashboard'
 import Practice from './pages/Practice'
 import NavBar from './components/NavBar'
-import {Box} from "@mui/material";
+import Box from '@mui/material/Box';
 import { userContext } from './userContext';
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "./firebase";
 import axios from "axios";
 import backendApi from './.env.json'
+import Loader from "./components/Loader";
 
 function App() {
   const [user, loading, error] = useAuthState(auth);
-
   return (
-    <userContext.Provider value= {user}>
-      <div className="App">
-        <NavBar/>
-        <Box display={"flex"} flexDirection={"column"} padding={"4rem"}>
-          <Routes>
-            <Route path="/login" element={<LoginPage/>}/>
-            <Route path="/dashboard" element={<Dashboard/>}/>
-            <Route path="/practice" element={<Practice/>}/>
-          </Routes>
-        </Box>
-      </div>
-    </userContext.Provider>
+    <div>
+    { !user || loading ? <Loader/> :
+      <userContext.Provider value={{user, loading}}>
+        <div className="App">
+          <NavBar/>
+          <Box display={"flex"} flexDirection={"column"} padding={"4rem"}>
+            <Routes>
+              <Route path="/login" element={<LoginPage/>}/>
+              <Route path="/dashboard" element={<Dashboard/>}/>
+              <Route path="/practice" element={<Practice/>}/>
+            </Routes>
+          </Box>
+        </div>
+      </userContext.Provider>
+    }
+    </div>
   );
 }
 
