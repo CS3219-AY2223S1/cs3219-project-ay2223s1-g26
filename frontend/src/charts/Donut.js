@@ -20,9 +20,6 @@ export default function Donut(props) {
     reactDonutChartStrokeColor = color;
   };
   
-  Donut.defaultProps = {
-    data: [0, 0, 0]
-  }
   const reactDonutChartdata = [
     {
       label: "Easy",
