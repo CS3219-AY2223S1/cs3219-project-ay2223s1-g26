@@ -26,9 +26,9 @@ app.use(bodyParser.json({ verify: rawBodySaver }))
 app.post('/api/:route(*)', (req, res) => {
   require('./user/route').post(req, res, admin)
 })
-// app.get('/api', (req, res) => {
-//   res.status(200).send('test')
-// })
+app.get('/api', (req, res) => {
+  res.status(200).send('test')
+})
 
 app.get('*', require('./routes')._404Html)
 app.post('*', require('./routes')._404)
