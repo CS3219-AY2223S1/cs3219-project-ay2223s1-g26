@@ -1,9 +1,18 @@
 const functions = require('firebase-functions')
 var auth = require('../auth')
 
-async function getUser(res, admin, uid) {
+async function getUser(res, admin, user) {
+  const uid = user.uid
+  functions.logger.log(user)
   try {
     const userSnapshot = await admin.firestore().collection('users').doc(uid).get()
+    if (!userSnapshot.exists) { // New user
+      await admin.firestore().collection('users').doc(uid).set({
+        email: user.email,
+        name: user.name
+      })
+      return
+    }
     const firestoreUser = Object.assign({
       id: userSnapshot.id
     }, userSnapshot.data())
@@ -22,12 +31,12 @@ module.exports = {
     })
   },
   async post(req, res, admin) {
-    const uid = await auth.getUserUId(req, res)
-    if (!uid) {
+    const user = await auth.getUser(req, res)
+    if (!user || !user.uid) {
       return
     }
     if (req.params.route === 'getUser') {
-      await getUser(res, admin, uid)
+      await getUser(res, admin, user)
       return
     } else {
       res.status(404).send('Not found')

@@ -1,5 +1,4 @@
-| users/{uid}           |
-| --------------------- |
-| email (ref)           |
-| name (string)         |
-| updatedAt (timestamp) |
+| users/{uid}    |
+| -------------- |
+| email (string) |
+| name (string)  |

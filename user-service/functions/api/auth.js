@@ -16,14 +16,17 @@ async function decode(authHeader) {
   return null
 }
 
-async function getUserUId(req, res) { //req do not seem to be taking in cur token thru webapp
+async function getUser(req, res) { //req do not seem to be taking in cur token thru webapp
   const authHeader = req.get('Authorization')
   const decodedToken = await decode(authHeader)
+  // functions.logger.log(decodedToken)
   if (!decodedToken || !decodedToken.uid) {
-    res.sendStatus(403)
+    res.sendStatus(401)
+    functions.logger.error('Unauthorized', decodedToken)
     return false
   }
-  return decodedToken.uid
+  return decodedToken
 }
 
-module.exports = { decode, getUserUId }
+
+module.exports = { decode, getUser }
