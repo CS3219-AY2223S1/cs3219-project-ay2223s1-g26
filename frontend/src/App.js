@@ -23,7 +23,12 @@ function App() {
     <userContext.Provider value={user}>
       <div className="App">
         <NavBar />
-        <Box display={"flex"} flexDirection={"column"} padding={"4rem"}>
+        <Box
+          display="flex"
+          alignItems="center"
+          flexDirection="column"
+          padding="2rem 0"
+        >
           <Routes>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/dashboard" element={<Dashboard />} />
