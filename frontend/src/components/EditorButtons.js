@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
-import ButtonGroup from "@mui/material/ButtonGroup";
 
 const EditorButtons = ({ handleLeave }) => {
   const buttonStyle = { flex: 1, height: "80%" };
