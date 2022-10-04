@@ -2,7 +2,7 @@ import { ButtonGroup, Button, Grid, Typography } from "@mui/material";
 import { useEffect, useState, useCallback, useContext } from "react";
 import { io } from "socket.io-client";
 import { useNavigate } from "react-router-dom";
-import { userContext } from "../userContext";
+import { context } from "../context";
 
 const Difficulty = {
   Easy: "easy",
@@ -21,8 +21,8 @@ function DifficultySelect() {
   const [partnerUuid, setPartnerUuid] = useState();
   const [roomUuid, setRoomUuid] = useState();
 
-  const user = useContext(userContext);
-  console.log(user ? user.uid : null);
+  const user = useContext(context);
+  console.log(user ? user.user.data.uid : null);
 
   useEffect(() => {
     msSocket = io("http://localhost:3000");
