@@ -14,8 +14,6 @@ io.on("connection", (socket) => {
   //   socket.to(targetSocket).emit("private message", socket.id, msg);
   // });
   socket.on("match", (args) => {
-    console.log(args);
-    console.log("Room: ", args.roomid);
     socket.join(args.roomid); // join specific room
     socket.on("text", (msg) => {
       io.to(args.roomid).emit("text", msg);
@@ -25,8 +23,6 @@ io.on("connection", (socket) => {
       socket.leave(args.roomid);
     });
   });
-
-  console.log("connection: ", socket.id);
   return;
 });
 

@@ -3,107 +3,87 @@ import { useState, useEffect, useContext } from "react";
 import Editor from "@monaco-editor/react";
 import "./CommonEditor.css";
 import EditorButtons from "./EditorButtons";
-import Modal from "react-modal";
-import Button from "@mui/material/Button";
+import PartnerLeftModal from "./PartnerLeftModal";
+
 import { useNavigate } from "react-router";
 import { context } from "../context";
 
 const { io } = require("socket.io-client");
 
-const CommonEditor = ({ uuid1, uuid2, roomid, difficulty }) => {
+const CommonEditor = ({ uuid1, uuid2, roomid, difficulty, questionId }) => {
   const navigate = useNavigate();
-  console.log("env: ", process.env.REACT_APP_ENV);
   // Determine user and partner ID to use based on environment
   const { user, setIsLoading, $axios } = useContext(context);
 
   const [textValue, setTextValue] = useState("");
   const [clientSocket, setClientSocket] = useState();
   const [partnerLeave, setPartnerLeave] = useState(false);
+  const [textChanged, setTextChanged] = useState(true);
 
   useEffect(() => {
-    console.log("room_id: ", roomid);
     let socket = io("http://localhost:8081");
     socket.on("connect", () => {
-      console.log(socket.id);
       socket.emit("match", { uuid1, uuid2, roomid });
     });
     socket.on("text", handleChangeReceived);
-    socket.on("confirmed", console.log("confirmed"));
     socket.on("left", handlePartnerLeave);
     setClientSocket(socket);
-  }, []);
+  }, [uuid1, uuid2, roomid]);
 
   const handleChangeEmitted = (text) => {
-    console.log(text);
-    console.log("change emitted: ", text);
+    setTextChanged(true);
     setTextValue(text);
     clientSocket.emit("text", text);
   };
 
   const handleChangeReceived = (text) => {
-    console.log("received: ", text);
+    setTextChanged(true);
     setTextValue(text);
   };
 
   const handleLeave = () => {
-    console.log(uuid1, " is leaving the room");
     clientSocket.emit("leave");
     clientSocket.close();
-  };
-
-  const handlePartnerLeave = () => {
-    console.log("partner has left");
-    setPartnerLeave(true);
-  };
-
-  // TODO: Temp API while we figure out the actual
-  const handleSave = async () => {
-    const response = await $axios.post(`${$axios.defaults.baseURL}/save`);
-  };
-
-  const handleCompleted = async () => {
-    const response = await $axios.post(`${$axios.defaults.baseURL}/completed`);
-  };
-
-  const rerouteToLobby = () => {
     navigate("/dashboard");
   };
 
-  const modalStyle = {
-    overlay: {
-      backgroundColor: "rgba(100, 100, 100, 0.5)",
-      height: "100vh",
-      width: "100vw",
-      padding: "30vh 25vw",
-      boxSizing: "border-box",
-    },
-    content: {
-      margin: "20vh 30vw",
-      boxSizing: "border-box",
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "center",
-      alignItems: "center",
-      borderRadius: "3rem",
-    },
+  const handlePartnerLeave = () => {
+    setPartnerLeave(true);
+  };
+
+  const handleSave = () => {
+    $axios.post(`${$axios.defaults.baseURL}/saveCode`, {
+      questionId: questionId,
+      code: textValue,
+    });
+    console.log("handleSave: ", {
+      questionId: questionId,
+      code: textValue,
+    });
+  };
+
+  const handleCompleted = () => {
+    $axios.post(`${$axios.defaults.baseURL}/addQuestionAttempt`, {
+      questionId: questionId,
+      questionDifficulty: difficulty,
+      questionTitle: "TBC",
+    });
+    console.log("handleCompleted: ", {
+      questionId: questionId,
+      questionDifficulty: difficulty,
+      questionTitle: "TBC",
+    });
   };
 
   return (
     <>
-      <Modal isOpen={partnerLeave} style={modalStyle}>
-        <h1>Partner has left the session</h1>
-        <h3 style={{ textAlign: "center" }}>
-          Return to the matching lobby to find a new partner
-        </h3>
-        <Button
-          size="large"
-          variant="outlined"
-          width="20%"
-          onClick={rerouteToLobby}
-        >
-          Return to Lobby
-        </Button>
-      </Modal>
+      <PartnerLeftModal
+        partnerLeave={partnerLeave}
+        handleCompleted={handleCompleted}
+        handleSave={handleSave}
+        textChanged={textChanged}
+        setTextChanged={setTextChanged}
+      />
       <div className="editorAndButtonsContainer">
         <div className="commonEditor">
           <Editor
@@ -118,6 +98,8 @@ const CommonEditor = ({ uuid1, uuid2, roomid, difficulty }) => {
             handleLeave={handleLeave}
             handleSave={handleSave}
             handleCompleted={handleCompleted}
+            textChanged={textChanged}
+            setTextChanged={setTextChanged}
           />
         </div>
       </div>

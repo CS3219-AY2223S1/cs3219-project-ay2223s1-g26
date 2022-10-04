@@ -41,11 +41,11 @@ export const getRandomQuestionByDifficulty = async (req, res, next) => {
     .where("difficulty")
     .equals(req.query.difficulty);
 
-  // pick a question at random
-  const randomQuestion =
-    questionsByDifficulty[
-      Math.floor(Math.random() * questionsByDifficulty.length)
-    ];
+  const randomQuestion = req.query.seed
+    ? questionsByDifficulty[Math.floor(req.query.seed % 8)]
+    : questionsByDifficulty[
+        Math.floor(Math.random() * questionsByDifficulty.length)
+      ];
 
   return res.status(200).json({
     status: "success",
@@ -54,13 +54,13 @@ export const getRandomQuestionByDifficulty = async (req, res, next) => {
 };
 
 const isValidQuestionDifficulty = (difficulty, res) => {
-  if (difficulty == null) return false;
-
   const VALID_DIFFICULTIES = ["EASY", "MEDIUM", "HARD"];
-  if (!VALID_DIFFICULTIES.includes(difficulty)) {
-    return res.status(500).json({
-      status: "bad request",
+  if (difficulty == null || !VALID_DIFFICULTIES.includes(difficulty)) {
+    res.status(500).json({
+      status:
+        "Bad Request: Invalid Difficulty Level. Please provide difficulty of EASY, MEDIUM or HARD",
     });
+    return false;
   } else {
     return true;
   }

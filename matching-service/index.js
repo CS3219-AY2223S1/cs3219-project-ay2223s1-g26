@@ -46,12 +46,12 @@ io.on("connection", (socket) => {
         difficultyField
     );
     const partner = await getMatchQuery(uuidField, difficultyField);
-    console.log(partner);
     if (partner != null) {
       var roomUuid = uuidv4();
       const partnerUuid = partner[1];
-      // get a question here as well
-      socket.emit("matchFound", uuidField, partnerUuid, roomUuid);
+      // TODO return a random number used to get a deterministic qn
+      let questionSeed = Math.floor(Math.random * 100);
+      socket.emit("matchFound", uuidField, partnerUuid, roomUuid, questionSeed);
       const partnerSocketId = socketMap.get(partnerUuid);
       socket
         .to(partnerSocketId)

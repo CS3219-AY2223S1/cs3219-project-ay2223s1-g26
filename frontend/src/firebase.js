@@ -26,28 +26,6 @@ const googleProvider = new GoogleAuthProvider();
 const signInWithGoogle = async () => {
   try {
     const result = await signInWithPopup(auth, googleProvider);
-    // if (result && result.user) {
-    //   const idToken = await result.user.getIdToken();
-    //   console.log("idToken: ", idToken);
-    //   const userResponse = await axios.post(`${backendApi}/user/getUser`, {
-    //     headers: {
-    //       Authorization: "Bearer " + idToken,
-    //     },
-    //   });
-    //   return true;
-    // }
-
-    // const user = res.user;
-    // const q = query(collection(db, "users"), where("uid", "==", user.uid));
-    // const docs = await getDocs(q);
-    // if (docs.docs.length === 0) {
-    //   await addDoc(collection(db, "users"), {
-    //     uid: user.uid,
-    //     name: user.displayName,
-    //     authProvider: "google",
-    //     email: user.email,
-    //   });
-    // }
   } catch (err) {
     console.error(err);
   }
