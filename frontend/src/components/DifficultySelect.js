@@ -2,7 +2,7 @@ import { ButtonGroup, Button, Grid, Typography } from "@mui/material";
 import { useEffect, useState, useCallback, useContext } from "react";
 import { io } from "socket.io-client";
 import { useNavigate } from "react-router-dom";
-import { userContext } from "../userContext";
+import { context } from "../context";
 
 const Difficulty = {
   Easy: "easy",
@@ -21,15 +21,15 @@ function DifficultySelect() {
   const [partnerUuid, setPartnerUuid] = useState();
   const [roomUuid, setRoomUuid] = useState();
 
-  const user = useContext(userContext);
-  console.log(user ? user.uid : null);
+  const user = useContext(context);
+  console.log("user gotten from context: ", user?.user?.uid);
 
   useEffect(() => {
     msSocket = io("http://localhost:3000");
 
     msSocket.on("connected", () => {
       console.log("connected to match service!");
-      msSocket.emit("register", user ? user.uid : null);
+      msSocket.emit("register", user?.user?.uid);
     });
 
     msSocket.on("matchFound", (uuidField, partnerUuid, roomUuid) => {
@@ -63,7 +63,7 @@ function DifficultySelect() {
     }
     console.log(difficulty);
     setIsConnecting(true);
-    msSocket.emit("getMatch", user ? user.uid : null, difficulty);
+    msSocket.emit("getMatch", user.user.uid, difficulty);
   }, [difficulty]);
 
   //Connecting hook

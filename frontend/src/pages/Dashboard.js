@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { context } from "../context";
 import Donut from "../charts/Donut";
+import DifficultySelect from "../components/DifficultySelect";
 
 function Dashboard() {
   const { user, setIsLoading, $axios } = useContext(context);
@@ -39,7 +40,7 @@ function Dashboard() {
   return (
     <div>
       {/* <Typography>Welcome {user ? user.displayName : 'User'}!</Typography> */}
-      {/* <DifficultySelect /> */}
+      <DifficultySelect />
       <h1>Welcome {user ? user.displayName : "User"}!</h1>
       {donutData && <Donut data={donutData} />}
     </div>
