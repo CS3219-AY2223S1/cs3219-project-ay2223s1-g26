@@ -43,7 +43,7 @@ function App() {
       setIsLoading(true);
       const idToken = await user.getIdToken();
       axios.defaults.headers.common["Authorization"] = `Bearer ${idToken}`;
-      console.log("idToken", idToken);
+      console.log("idToken: ", idToken);
       setIsLoading(false);
     }
     refreshIdToken();
