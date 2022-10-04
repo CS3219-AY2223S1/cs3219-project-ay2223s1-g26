@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 
-const EditorButtons = ({ handleLeave }) => {
+const EditorButtons = ({ handleLeave, handleSave, handleCompleted }) => {
   const buttonStyle = { flex: 1, height: "80%" };
 
   const handleLeaveButtonPress = () => {
@@ -20,7 +20,7 @@ const EditorButtons = ({ handleLeave }) => {
       style={{ padding: "1vh 2vw" }}
     >
       <Button size="large" variant="outlined" width="20%" style={buttonStyle}>
-        Attempted
+        Save
       </Button>
       <Button size="large" variant="contained" width="20%" style={buttonStyle}>
         Completed

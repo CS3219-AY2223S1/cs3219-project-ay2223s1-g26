@@ -1,11 +1,12 @@
 import * as React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import Editor from "@monaco-editor/react";
 import "./CommonEditor.css";
 import EditorButtons from "./EditorButtons";
 import Modal from "react-modal";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router";
+import { context } from "../context";
 
 const { io } = require("socket.io-client");
 
@@ -13,6 +14,7 @@ const CommonEditor = ({ uuid1, uuid2, roomid, difficulty }) => {
   const navigate = useNavigate();
   console.log("env: ", process.env.REACT_APP_ENV);
   // Determine user and partner ID to use based on environment
+  const { user, setIsLoading, $axios } = useContext(context);
 
   const [textValue, setTextValue] = useState("");
   const [clientSocket, setClientSocket] = useState();
@@ -54,9 +56,14 @@ const CommonEditor = ({ uuid1, uuid2, roomid, difficulty }) => {
     setPartnerLeave(true);
   };
 
-  const handleAttempted = () => {};
+  // TODO: Temp API while we figure out the actual
+  const handleSave = async () => {
+    const response = await $axios.post(`${$axios.defaults.baseURL}/save`);
+  };
 
-  const handleCompleted = () => {};
+  const handleCompleted = async () => {
+    const response = await $axios.post(`${$axios.defaults.baseURL}/completed`);
+  };
 
   const rerouteToLobby = () => {
     navigate("/dashboard");
@@ -109,7 +116,7 @@ const CommonEditor = ({ uuid1, uuid2, roomid, difficulty }) => {
           />
           <EditorButtons
             handleLeave={handleLeave}
-            handleAttempted={handleAttempted}
+            handleSave={handleSave}
             handleCompleted={handleCompleted}
           />
         </div>
