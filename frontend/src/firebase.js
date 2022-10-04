@@ -26,6 +26,9 @@ const googleProvider = new GoogleAuthProvider();
 const signInWithGoogle = async () => {
   try {
     const result = await signInWithPopup(auth, googleProvider);
+    if (result && result.user) {
+      return true;
+    }
   } catch (err) {
     console.error(err);
   }
