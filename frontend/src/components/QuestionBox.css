@@ -1,11 +1,12 @@
 .questionboxContainer{
-    width: 50%;
+    width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    padding: 25px 50px;
+    padding: 15px 50px;
     border: 2px solid skyblue;
+    box-sizing: border-box;
 }
 
 .markdownContainer {

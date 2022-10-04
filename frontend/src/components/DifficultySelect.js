@@ -20,25 +20,30 @@ function DifficultySelect() {
   const [isMatched, setIsMatched] = useState(false);
   const [partnerUuid, setPartnerUuid] = useState();
   const [roomUuid, setRoomUuid] = useState();
+  const [questionSeed, setQuestionSeed] = useState(null);
 
   const user = useContext(context);
-  console.log(user ? user.user.data.uid : null);
+  console.log("user gotten from context: ", user?.user?.uid);
 
   useEffect(() => {
     msSocket = io("http://localhost:3000");
 
     msSocket.on("connected", () => {
       console.log("connected to match service!");
-      msSocket.emit("register", user ? user.uid : null);
+      msSocket.emit("register", user?.user?.uid);
     });
 
-    msSocket.on("matchFound", (uuidField, partnerUuid, roomUuid) => {
-      clearTimeout(timer);
-      setIsMatched(true);
-      setPartnerUuid(partnerUuid);
-      setRoomUuid(roomUuid);
-      msSocket.emit("deregister");
-    });
+    msSocket.on(
+      "matchFound",
+      (uuidField, partnerUuid, roomUuid, questionSeed) => {
+        clearTimeout(timer);
+        setIsMatched(true);
+        setPartnerUuid(partnerUuid);
+        setRoomUuid(roomUuid);
+        setQuestionSeed(questionSeed);
+        msSocket.emit("deregister");
+      }
+    );
 
     msSocket.on("deregister_success", () => {
       console.log("deregister_success");
@@ -63,7 +68,7 @@ function DifficultySelect() {
     }
     console.log(difficulty);
     setIsConnecting(true);
-    msSocket.emit("getMatch", user ? user.uid : null, difficulty);
+    msSocket.emit("getMatch", user.user.uid, difficulty);
   }, [difficulty]);
 
   //Connecting hook
@@ -96,6 +101,7 @@ function DifficultySelect() {
         partnerUuid: partnerUuid,
         roomUuid: roomUuid,
         difficulty: difficulty,
+        questionSeed: questionSeed,
       },
     });
   };

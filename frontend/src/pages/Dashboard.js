@@ -39,9 +39,10 @@ function Dashboard() {
 
   return (
     <div>
+      {/* <Typography>Welcome {user ? user.displayName : 'User'}!</Typography> */}
+      <DifficultySelect />
       <h1>Welcome {user ? user.displayName : "User"}!</h1>
       {donutData && <Donut data={donutData} />}
-      <DifficultySelect />
     </div>
   );
 }

@@ -7,23 +7,24 @@ import MediumQuestion from "../resources/Medium.md";
 import HardQuestion from "../resources/Hard.md";
 import "./QuestionBox.css";
 
-const QuestionBox = ({ difficulty }) => {
-  const QUESTIONS = {
-    Easy: EasyQuestion,
-    Medium: MediumQuestion,
-    Hard: HardQuestion,
-  };
+const QuestionBox = ({ questionProp }) => {
   const DIFFICULTY = "Easy";
-
-  // TODO: Implement this based on route parameters
-  // const DIFFICULTY = difficulty;
-
   const [question, setQuestion] = useState("");
+
   useEffect(() => {
-    fetch(QUESTIONS[DIFFICULTY])
-      .then((res) => res.text())
-      .then((text) => setQuestion(text));
-  }, []);
+    const QUESTIONS = {
+      Easy: EasyQuestion,
+      Medium: MediumQuestion,
+      Hard: HardQuestion,
+    };
+
+    questionProp
+      ? setQuestion(questionProp)
+      : fetch(QUESTIONS[DIFFICULTY])
+          .then((res) => res.text())
+          .then((text) => setQuestion(text));
+  }, [questionProp]);
+
   return (
     <div className="questionboxContainer">
       <ReactMarkdown className="markdownContainer" children={question} />

@@ -14,15 +14,15 @@ io.on("connection", (socket) => {
   //   socket.to(targetSocket).emit("private message", socket.id, msg);
   // });
   socket.on("match", (args) => {
-    console.log(args);
-    console.log("Room: ", args.ROOM_ID);
-    socket.join(args.ROOM_ID); // join specific room
+    socket.join(args.roomid); // join specific room
     socket.on("text", (msg) => {
-      io.emit("text", msg);
+      io.to(args.roomid).emit("text", msg);
+    });
+    socket.on("leave", () => {
+      io.to(args.roomid).emit("left");
+      socket.leave(args.roomid);
     });
   });
-
-  console.log("connection: ", socket.id);
   return;
 });
 
