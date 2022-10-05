@@ -8,9 +8,14 @@ import PartnerLeftModal from "./PartnerLeftModal";
 import { useNavigate } from "react-router";
 import { context } from "../context";
 
-const { io } = require("socket.io-client");
-
-const CommonEditor = ({ uuid1, uuid2, roomid, difficulty, questionId }) => {
+const CommonEditor = ({
+  uuid1,
+  uuid2,
+  roomid,
+  difficulty,
+  questionId,
+  socket,
+}) => {
   const navigate = useNavigate();
   // Determine user and partner ID to use based on environment
   const { user, setIsLoading, $axios } = useContext(context);
@@ -21,14 +26,14 @@ const CommonEditor = ({ uuid1, uuid2, roomid, difficulty, questionId }) => {
   const [textChanged, setTextChanged] = useState(true);
 
   useEffect(() => {
-    let socket = io("http://localhost:8081");
+    if (!socket) return;
     socket.on("connect", () => {
       socket.emit("match", { uuid1, uuid2, roomid });
     });
     socket.on("text", handleChangeReceived);
     socket.on("left", handlePartnerLeave);
     setClientSocket(socket);
-  }, [uuid1, uuid2, roomid]);
+  }, [uuid1, uuid2, roomid, socket]);
 
   const handleChangeEmitted = (text) => {
     setTextChanged(true);

@@ -6,7 +6,6 @@ import DifficultySelect from "../components/DifficultySelect";
 function Dashboard() {
   const { user, setIsLoading, $axios } = useContext(context);
   const [donutData, setDonutData] = useState([0, 0, 0]);
-  console.log(user);
   useEffect(() => {
     if (!user) {
       return;
