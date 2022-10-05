@@ -32,40 +32,33 @@ const io = new Server(httpServer, {
 const socketMap = new Map();
 
 io.on("connection", (socket) => {
-  console.log("A client connected!");
-  socket.emit("connected");
-  socket.on("register", function (uuidField) {
-    socketMap.set(uuidField, socket.id);
-    console.log("socket " + socket.id + " registered, with id: " + uuidField);
-  });
-  socket.on("getMatch", async function (uuidField, difficultyField) {
-    console.log(
-      "getMatch called with uuid: " +
-        uuidField +
-        " and difficulty: " +
-        difficultyField
-    );
-    const partner = await getMatchQuery(uuidField, difficultyField);
-    if (partner != null) {
-      var roomUuid = uuidv4();
-      const partnerUuid = partner[1];
-      // TODO return a random number used to get a deterministic qn
-      let questionSeed = Math.floor(Math.random * 100);
-      socket.emit("matchFound", uuidField, partnerUuid, roomUuid, questionSeed);
-      const partnerSocketId = socketMap.get(partnerUuid);
-      socket
-        .to(partnerSocketId)
-        .emit("matchFound", partnerSocketId, uuidField, roomUuid);
-    }
-  });
-  socket.on("deregister", async function (uuidField) {
-    const waitee = await deleteWaitingQuery(uuidField);
-    if (waitee == null) {
-      //socket.emit("deregister_failed");
-    }
-    socket.emit("deregister_success");
-  });
-});
+    console.log("A client connected!");
+    socket.emit("connected");
+    socket.on("register", function(uuidField) {
+        socketMap.set(uuidField, socket.id);
+        console.log("socket " + socket.id + " registered, with id: " + uuidField);
+    })
+    socket.on('getMatch', async function(uuidField, difficultyField) {
+        console.log("getMatch called with uuid: " +  uuidField + " and difficulty: " + difficultyField);
+        const partner = await getMatchQuery(uuidField, difficultyField);
+        console.log(partner);
+        if (partner != null) {
+            var roomUuid = uuidv4();
+            const partnerUuid = partner[1];
+            socket.emit("matchFound", uuidField, partnerUuid, roomUuid);
+            const partnerSocketId = socketMap.get(partnerUuid);
+            socket.to(partnerSocketId).emit("matchFound", partnerSocketId, uuidField, roomUuid)
+        }
+    })
+    
+    socket.on('deregister', async function(uuidField) {
+        const waitee = await deleteWaitingQuery(uuidField);
+        if (waitee == null) {
+            //socket.emit("deregister_failed");
+        }
+        socket.emit("deregister_success");
+    })
+})
 
 //Configure public folder
 var clientDir = path.join(__dirname, "public");

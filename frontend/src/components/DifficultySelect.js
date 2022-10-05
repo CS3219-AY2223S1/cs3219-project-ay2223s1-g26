@@ -1,4 +1,4 @@
-import { ButtonGroup, Button, Grid, Typography } from "@mui/material";
+import { ButtonGroup, Button, Grid, Typography, Snackbar, Alert, CircularProgress } from "@mui/material";
 import { useEffect, useState, useCallback, useContext } from "react";
 import { io } from "socket.io-client";
 import { useNavigate } from "react-router-dom";
@@ -77,14 +77,22 @@ function DifficultySelect() {
     if (isConnecting) {
       timer = setTimeout(() => {
         setIsConnecting(false);
-      }, 30000);
+        toggleTimeoutSnackBar();
+        setDifficulty(null);
+        setButtonsEnabled(true);
+      }, 3000);
       //Disable the buttons
-      //Start loading spinner
+      setButtonsEnabled(false);
+      document.getElementById("circularProgress").style.display = "block";
     } else {
       //Stop loading spinner
       //Enable the buttons
+      document.getElementById("circularProgress").style.display = "none";
+      setButtonsEnabled(true);
     }
   }, [isConnecting]);
+
+  const [buttonsEnabled, setButtonsEnabled] = useState(true);
 
   const handleDifficultyButton = useCallback((diff) => {
     setDifficulty(diff);
@@ -106,47 +114,75 @@ function DifficultySelect() {
     });
   };
 
+  const [timeoutSnackbarOpen, setTimeoutSnackBarOpen] = useState(false)
+  const toggleTimeoutSnackBar = () => {
+    timeoutSnackbarOpen ? setTimeoutSnackBarOpen(false) : setTimeoutSnackBarOpen(true)
+  }
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setTimeoutSnackBarOpen(false);
+  };
+
   return (
     <div>
       <Grid
         container
-        spacing={12}
+        spacing={8}
         direction="column"
         justifyContent="center"
         alignItems="center"
         style={{ minHeight: "100vh" }}
       >
-        <Typography variant="h5" color="inherit" component="div" mb={2}>
-          Select the desired question difficulty level:
-        </Typography>
-        <ButtonGroup
-          variant="text"
-          aria-label="text button group"
-          display="flex"
-        >
-          <Button
-            onClick={() => {
-              handleDifficultyButton(Difficulty.Easy);
-            }}
+        <Grid item>
+          <Typography variant="h5" color="inherit" component="div">
+            Select the desired question difficulty level:
+          </Typography>
+        </Grid>
+        <Grid item>
+          <ButtonGroup
+            variant="text"
+            aria-label="text button group"
+            display="flex"
           >
-            Easy
-          </Button>
-          <Button
-            onClick={() => {
-              handleDifficultyButton(Difficulty.Medium);
-            }}
-          >
-            Medium
-          </Button>
-          <Button
-            onClick={() => {
-              handleDifficultyButton(Difficulty.Hard);
-            }}
-          >
-            Hard
-          </Button>
-        </ButtonGroup>
+            <Button
+              onClick={() => {
+                handleDifficultyButton(Difficulty.Easy);
+              }}
+              disabled = {!buttonsEnabled}
+            >
+              Easy
+            </Button>
+            <Button
+              onClick={() => {
+                handleDifficultyButton(Difficulty.Medium);
+              }}
+              disabled = {!buttonsEnabled}
+            >
+              Medium
+            </Button>
+            <Button
+              onClick={() => {
+                handleDifficultyButton(Difficulty.Hard);
+              }}
+              disabled = {!buttonsEnabled}
+            >
+              Hard
+            </Button>
+          </ButtonGroup>
+        </Grid>
+        <Grid item>
+          <div id = "circularProgress" display = "none">
+            <CircularProgress />
+          </div>
+        </Grid>
       </Grid>
+      <Snackbar open={timeoutSnackbarOpen} autoHideDuration={6000} onClose={handleClose} anchorOrigin = {{vertical:'bottom', horizontal:'right'}}>
+        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>No match could be found! Returning to difficulty select.</Alert>
+      </Snackbar>
     </div>
   );
 }
