@@ -10,13 +10,13 @@ const io = new Server(httpServer, {
 });
 
 io.on("connection", (socket) => {
-  // socket.on("private message", (targetSocket, msg) => {
-  //   socket.to(targetSocket).emit("private message", socket.id, msg);
-  // });
   socket.on("match", (args) => {
     socket.join(args.roomid); // join specific room
     socket.on("text", (msg) => {
       io.to(args.roomid).emit("text", msg);
+    });
+    socket.on("message", (msg) => {
+      io.to(args.roomid).emit("message", msg);
     });
     socket.on("leave", () => {
       io.to(args.roomid).emit("left");

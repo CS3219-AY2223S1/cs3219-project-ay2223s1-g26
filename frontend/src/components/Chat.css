@@ -1,0 +1,44 @@
+.outerChatContainer {
+    width: 99%;
+    min-height: 30%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    border: 2px solid skyblue;
+    margin-top: 1rem;
+}
+
+.chatContainer {
+    width: 100%;
+    min-height: 78%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+}
+
+.selfBubble {
+    width: 100%;
+    min-height: 5rem;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.otherBubble {
+    width: 100%;
+    min-height: 5rem;
+    display: flex;
+    align-items: center;
+}
+
+.bubble {
+    padding: 1rem 2rem;
+    margin: 0 1rem;
+    border-radius: 1rem;
+    border: 2px solid black
+}
+
+.textAndSubmit {
+    display: flex;
+}

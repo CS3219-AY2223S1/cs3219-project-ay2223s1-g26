@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 
@@ -24,11 +24,10 @@ const EditorButtons = ({
     <Stack
       spacing={2}
       direction="row"
-      justifyContent="space-evenly"
       alignItems="center"
       height="10%"
       display="flex"
-      style={{ padding: "1vh 2vw" }}
+      style={{ paddingTop: "1vh" }}
     >
       <Button
         size="large"
