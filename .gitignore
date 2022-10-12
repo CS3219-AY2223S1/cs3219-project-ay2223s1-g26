@@ -5,3 +5,4 @@ user-service/ui-debug.log
 user-service/.env.json
 frontend/.env.json
 frontend/src/.env.json
+matching-service/.env
