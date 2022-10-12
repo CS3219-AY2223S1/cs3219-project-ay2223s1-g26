@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { context } from '../context';
 import Donut from '../charts/Donut'
 import Paper from '@mui/material/Paper'
-import Grid from '@material-ui/core/Grid'
+import Grid from '@mui/material/Grid'
 import Divider from '@mui/material/Divider';
 import { makeStyles } from '@material-ui/core/styles'
 import Box from '@mui/material/Box';
