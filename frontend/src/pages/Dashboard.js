@@ -58,32 +58,32 @@ function Dashboard() {
   // console.log(user)
   useEffect(() => {
     if (!user) {
-      return
+      return;
     }
-    setIsLoading(true)
-    getDashboardInfo()
-    setIsLoading(false)
-  }, [user])
+    setIsLoading(true);
+    getDashboardInfo();
+    setIsLoading(false);
+  }, [user]);
   async function getDashboardInfo() {
     try {
-      const response = await $axios.post(`${$axios.defaults.baseURL}/getUser`)
+      const response = await $axios.post(`${$axios.defaults.baseURL}/getUser`);
       if (!response) {
-        return
+        return;
       }
-      const data = response.data
-      prepareDonutData(data)
+      const data = response.data;
+      prepareDonutData(data);
     } catch (e) {
-      console.error(e)
+      console.error(e);
     }
   }
 
   function prepareDonutData(userInfo) {
-    const obj = userInfo.questionDifficulty
-    const data = []
+    const obj = userInfo.questionDifficulty;
+    const data = [];
     for (const property in obj) {
-      data.push(obj[property])
+      data.push(obj[property]);
     }
-    setDonutData(data)
+    setDonutData(data);
   }
 
   return (
