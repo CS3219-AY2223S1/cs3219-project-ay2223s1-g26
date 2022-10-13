@@ -20,6 +20,11 @@ export default  function Card(props) {
     'Medium': <Battery80Icon sx={{ color: 'orange' }}/>,
     'Hard': <BatteryChargingFullIcon sx={{ color: 'red' }}/>
   }
+  function formatTimestamp(timestamp) {
+    const dateInMillis  = timestamp._seconds * 1000
+    const date = new Date(dateInMillis).toDateString() + ' at ' + new Date(dateInMillis).toLocaleTimeString()
+    return date
+  }
   return (
     <div>
       <Paper elevation={3} sx={{
@@ -41,9 +46,9 @@ export default  function Card(props) {
           <nav aria-label="main mailbox folders">
             <List>
             {data
-              ? data.map(obj => {
+              ? data.map((obj, i) => {
                 return (
-                  <ListItem disablePadding>
+                  <ListItem key={i} disablePadding>
                     <ListItemButton href="/">
                       <ListItemAvatar>
                         <Avatar style={{
@@ -52,7 +57,7 @@ export default  function Card(props) {
                           {iconMapping[obj.questionDifficulty]}
                         </Avatar>
                       </ListItemAvatar>
-                      <ListItemText primary={obj.questionTitle} />
+                      <ListItemText primary={obj.questionTitle} secondary={formatTimestamp(obj.timestamp)}/>
                     </ListItemButton>
                   </ListItem>
                 )
