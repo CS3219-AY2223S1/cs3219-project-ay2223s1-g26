@@ -84,7 +84,7 @@ async function saveCode(res, admin, uid, questionId, questionDifficulty, questio
       updatedAt: admin.firestore.FieldValue.serverTimestamp()
     }, { merge: true }))
     promises.push(userRef.set({
-      savedCode: questionObj,
+      questionsSaved: questionObj,
       updatedAt: admin.firestore.FieldValue.serverTimestamp()
     }, { merge: true }))
     await Promise.all(promises)
