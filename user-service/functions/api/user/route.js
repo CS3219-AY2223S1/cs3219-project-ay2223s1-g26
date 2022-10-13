@@ -1,4 +1,5 @@
 const functions = require('firebase-functions')
+const { ResultStorage } = require('firebase-functions/v1/testLab')
 var auth = require('../auth')
 
 async function getUser(res, admin, user) {
@@ -39,7 +40,8 @@ async function addQuestionAttempt(res, admin, uid, questionId, questionDifficult
     const questionObj = {
       [questionId] : {
         questionTitle,
-        questionDifficulty
+        questionDifficulty,
+        timestamp: admin.firestore.FieldValue.serverTimestamp()
       }
     }
     const difficulties = ['Easy', 'Medium', 'Hard']
@@ -64,13 +66,28 @@ async function addQuestionAttempt(res, admin, uid, questionId, questionDifficult
   }
 }
 
-async function saveCode(res, admin, uid, questionId, code) {
+async function saveCode(res, admin, uid, questionId, questionDifficulty, questionTitle, code) {
   try {
     const userRef = admin.firestore().collection('users').doc(uid)
-    await userRef.collection('savedCode').doc(questionId).set({
+    const questionObj = {
+      [questionId] : {
+        questionTitle,
+        questionDifficulty,
+        timestamp: admin.firestore.FieldValue.serverTimestamp()
+      }
+    }
+    const promises = []
+    promises.push(userRef.collection('savedCode').doc(questionId).set({
+      questionDifficulty,
+      questionTitle,
       code,
       updatedAt: admin.firestore.FieldValue.serverTimestamp()
-    }, { merge: true })
+    }, { merge: true }))
+    promises.push(userRef.set({
+      savedCode: questionObj,
+      updatedAt: admin.firestore.FieldValue.serverTimestamp()
+    }, { merge: true }))
+    await Promise.all(promises)
     res.sendStatus(200)
   } catch (e) {
     functions.logger.error(e)
@@ -127,7 +144,7 @@ module.exports = {
       }
     } else if (req.params.route === 'saveCode') {
       if (req.body.questionId, req.body.code) {
-        await saveCode(res, admin, uid, req.body.questionId, req.body.code)
+        await saveCode(res, admin, uid, req.body.questionId, req.body.questionDifficulty, req.body.questionTitle, req.body.code)
         return
       } else {
         res.sendStatus(400)
