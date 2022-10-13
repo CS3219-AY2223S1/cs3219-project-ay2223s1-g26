@@ -52,11 +52,11 @@ async function addQuestionAttempt(res, admin, uid, questionId, questionDifficult
         Object.assign(newDifficultyMap, {[diff]: oldDifficultyMap[diff]})
       }
     }
-    await userRef.update({
+    await userRef.set({
       questionsAttempted: questionObj,
       questionDifficulty: newDifficultyMap,
       updatedAt: admin.firestore.FieldValue.serverTimestamp()
-    })
+    }, {merge: true})
     res.sendStatus(200)
   } catch (e) {
     functions.logger.error(e)
