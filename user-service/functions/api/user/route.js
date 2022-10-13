@@ -39,7 +39,8 @@ async function addQuestionAttempt(res, admin, uid, questionId, questionDifficult
     const questionObj = {
       [questionId] : {
         questionTitle,
-        questionDifficulty
+        questionDifficulty,
+        timestamp: admin.firestore.FieldValue.serverTimestamp()
       }
     }
     const difficulties = ['Easy', 'Medium', 'Hard']
