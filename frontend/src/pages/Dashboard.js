@@ -9,6 +9,7 @@ import Card from '../components/Card'
 export default function Dashboard() {
   const { user, setIsLoading, $axios } = useContext(context)
   const [donutData, setDonutData] = useState([0, 0, 0])
+  const [cardData, setCardData] = useState([])
   // console.log(user)
   useEffect(() => {
     if (!user) {
@@ -26,6 +27,7 @@ export default function Dashboard() {
       }
       const data = response.data;
       prepareDonutData(data);
+      prepareCardData(data)
     } catch (e) {
       console.error(e);
     }
@@ -38,6 +40,15 @@ export default function Dashboard() {
       data.push(obj[property]);
     }
     setDonutData(data);
+  }
+
+  function prepareCardData(userInfo) {
+    const obj = userInfo.questionsAttempted;
+    const data = [];
+    for (const property in obj) {
+      data.push(obj[property]);
+    }
+    setCardData(data)
   }
 
   return (
@@ -68,14 +79,14 @@ export default function Dashboard() {
           </Paper>
         </Grid>
         <Grid item xs={4}>
-          <Card title='Completed'/>
+          <Card title='Saved code'/>
         </Grid>
         <Grid item xs={4}>
           <Card title='Completed'/>
         </Grid>
       </Grid>
       <Grid item xs={12} style={{marginTop: 25}}>
-        <Card title='History'/>
+        <Card title='History' data={cardData}/>
       </Grid>
     </div>
   );

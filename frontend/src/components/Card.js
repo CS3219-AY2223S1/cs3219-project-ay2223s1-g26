@@ -7,11 +7,19 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/Inbox';
-import DraftsIcon from '@mui/icons-material/Drafts';
+import Avatar from '@mui/material/Avatar';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import Battery30Icon from '@mui/icons-material/Battery30';
+import Battery80Icon from '@mui/icons-material/Battery80';
+import BatteryChargingFullIcon from '@mui/icons-material/BatteryChargingFull';
 
 export default  function Card(props) {
   const data = props.data
+  const iconMapping = {
+    'Easy': <Battery30Icon sx={{ color: 'green' }}/>,
+    'Medium': <Battery80Icon sx={{ color: 'orange' }}/>,
+    'Hard': <BatteryChargingFullIcon sx={{ color: 'red' }}/>
+  }
   return (
     <div>
       <Paper elevation={3} sx={{
@@ -33,14 +41,18 @@ export default  function Card(props) {
           <nav aria-label="main mailbox folders">
             <List>
             {data
-              ? data.map(tool => {
+              ? data.map(obj => {
                 return (
                   <ListItem disablePadding>
                     <ListItemButton href="/">
-                      <ListItemIcon>
-                        <InboxIcon />
-                      </ListItemIcon>
-                      <ListItemText primary="Question 1" />
+                      <ListItemAvatar>
+                        <Avatar style={{
+                          border: '1px solid lightgray'
+                        }} sx={{bgcolor: 'white'}}>
+                          {iconMapping[obj.questionDifficulty]}
+                        </Avatar>
+                      </ListItemAvatar>
+                      <ListItemText primary={obj.questionTitle} />
                     </ListItemButton>
                   </ListItem>
                 )
