@@ -70,7 +70,7 @@ export default function Dashboard() {
         </div>
       }
       <Grid container spacing={1} style={{marginTop: 25}}>
-        <Grid item xs={4}>
+        <Grid item xs={6}>
           <Paper elevation={3} sx={{
             p: { xs: 1, },
             textAlign: 'center',
@@ -87,12 +87,12 @@ export default function Dashboard() {
             { donutData && <Donut data={donutData}/> }
           </Paper>
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={6}>
           <Card title='Saved code' data={savedCardData}/>
         </Grid>
-        <Grid item xs={4}>
-          <Card title='Completed' data={attemptCardData}/>
-        </Grid>
+      </Grid>
+      <Grid item xs={12}>
+        <Card title='Completed' data={attemptCardData}/>
       </Grid>
     </div>
   );

@@ -15,6 +15,13 @@ import BatteryChargingFullIcon from '@mui/icons-material/BatteryChargingFull';
 
 export default  function Card(props) {
   const data = props.data
+  const divStyle = {
+    overflowY: 'auto',
+    width:'100%',
+    float: 'left',
+    height:'350px',
+    position:'relative'
+  };
   const iconMapping = {
     'Easy': <Battery30Icon sx={{ color: 'green' }}/>,
     'Medium': <Battery80Icon sx={{ color: 'orange' }}/>,
@@ -42,10 +49,10 @@ export default  function Card(props) {
         <Divider style={{
           margin: 5
         }}/>
-        <Box sx={{ width: '100%' }}>
-          <nav aria-label="main mailbox folders">
+        <Box sx={{ width: '100%' }} style={divStyle}>
+          <nav>
             <List>
-            {data
+            {data.length > 0
               ? data.map((obj, i) => {
                 return (
                   <ListItem key={i} disablePadding>

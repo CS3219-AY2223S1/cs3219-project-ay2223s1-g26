@@ -32,12 +32,12 @@ export default function Donut(props) {
         ],
         borderWidth: 1,
       },
-    ],
+    ]
   };
 
-  return <>
+  return <div>
     { hasData() 
-      ? <Doughnut data={config} /> 
+      ? <Doughnut data={config} style={{maxHeight: '340px'}}/> 
       : <p>No data</p>}
-  </>;
+  </div>;
 }

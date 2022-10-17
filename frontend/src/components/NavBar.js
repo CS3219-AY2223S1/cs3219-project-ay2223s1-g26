@@ -26,7 +26,7 @@ function NavBar() {
   const pages = loading
     ? []
     : user
-      ? ['Dashboard']
+      ? []
       : ['Login'];
   const settings = ['Logout'];
   
