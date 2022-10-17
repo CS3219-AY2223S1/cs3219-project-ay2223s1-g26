@@ -49,7 +49,7 @@ export default  function Card(props) {
               ? data.map((obj, i) => {
                 return (
                   <ListItem key={i} disablePadding>
-                    <ListItemButton href="/">
+                    <ListItemButton>
                       <ListItemAvatar>
                         <Avatar style={{
                           border: '1px solid lightgray'

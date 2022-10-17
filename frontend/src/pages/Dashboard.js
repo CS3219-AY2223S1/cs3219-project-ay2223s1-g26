@@ -69,7 +69,7 @@ export default function Dashboard() {
           Welcome <span style={{color: '#1b76d2'}}>{user.displayName}</span>
         </div>
       }
-      <Grid container spacing={1} style={{marginTop: 5}}>
+      <Grid container spacing={1} style={{marginTop: 25}}>
         <Grid item xs={4}>
           <Paper elevation={3} sx={{
             p: { xs: 1, },
@@ -93,9 +93,6 @@ export default function Dashboard() {
         <Grid item xs={4}>
           <Card title='Completed' data={attemptCardData}/>
         </Grid>
-      </Grid>
-      <Grid item xs={12} style={{marginTop: 25}}>
-        <Card title='History' data={attemptCardData}/>
       </Grid>
     </div>
   );
