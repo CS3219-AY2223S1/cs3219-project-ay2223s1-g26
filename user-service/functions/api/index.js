@@ -26,7 +26,8 @@ app.use(bodyParser.json({ verify: rawBodySaver }))
 app.post('/api/:route(*)', (req, res) => {
   require('./user/route').post(req, res, admin)
 })
-app.get('/api/:route(*)', (req, res) => {
+app.get('/api/:route(*)/', (req, res) => {
+  console.log(req)
   require('./user/route').get(req, res, admin)
 })
 app.get('/api', (req, res) => {

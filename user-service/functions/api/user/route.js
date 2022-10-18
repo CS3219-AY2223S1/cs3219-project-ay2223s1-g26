@@ -1,5 +1,4 @@
 const functions = require('firebase-functions')
-const { ResultStorage } = require('firebase-functions/v1/testLab')
 var auth = require('../auth')
 
 async function getUser(res, admin, user) {
@@ -128,8 +127,8 @@ module.exports = {
       await getUser(res, admin, user)
       return
     } else if (req.params.route === 'getSavedCode') {
-      if (req.params.questionId) {
-        await getSavedCode(res, admin, uid, req.params.questionId)
+      if (req.query.questionId) {
+        await getSavedCode(res, admin, uid, req.query.questionId)
         return
       } else {
         res.sendStatus(400)
