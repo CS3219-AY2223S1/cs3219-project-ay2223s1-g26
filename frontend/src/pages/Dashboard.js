@@ -22,7 +22,7 @@ export default function Dashboard() {
   }, [user]);
   async function getDashboardInfo() {
     try {
-      const response = await $axios.post(`${$axios.defaults.baseURL}/getUser`);
+      const response = await $axios.get(`${$axios.defaults.baseURL}/getUser`);
       if (!response) {
         return;
       }
