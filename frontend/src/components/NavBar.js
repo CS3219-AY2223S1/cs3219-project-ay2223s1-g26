@@ -29,7 +29,11 @@ function NavBar() {
       ? ['Dashboard', 'Practice']
       : ['Login'];
   const settings = ['Logout'];
-  
+  const pageMap = {
+    'Dashboard': 'dashboard',
+    'Login': 'login',
+    'Practice': 'difficultySelect',
+  }
   React.useEffect(() => {
     if (user) {
       navigate("/dashboard");
@@ -116,7 +120,7 @@ function NavBar() {
                   <Typography textAlign="center">
                   <Link 
                     style={{ textDecoration: "none", color: "black" }}
-                    to={`/${page}`}>
+                    to={`/${pageMap[page]}`}>
                     {page}
                   </Link>
                   </Typography>
@@ -151,7 +155,7 @@ function NavBar() {
               >
                 <Link 
                   style={{ textDecoration: "none", color: "white" }}
-                  to={`/${page}`}>
+                  to={`/${pageMap[page]}`}>
                   {page}
                 </Link>
               </Button>

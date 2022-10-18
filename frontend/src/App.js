@@ -8,7 +8,6 @@ import * as React from "react";
 import LoginPage from "./pages/LoginPage";
 import Error from "./pages/Error";
 import Dashboard from "./pages/Dashboard";
-import Practice from "./pages/Practice";
 import NavBar from "./components/NavBar";
 import Box from "@mui/material/Box";
 import { context } from "./context";
@@ -17,6 +16,7 @@ import { auth } from "./firebase";
 import axios from "axios";
 import Loader from "./components/Loader";
 import DifficultySelect from "./components/DifficultySelect";
+import Practice from "./pages/Practice";
 
 function App() {
   const [user, loading, error] = useAuthState(auth);
@@ -74,7 +74,8 @@ function App() {
                   {user ? (
                     <Routes>
                       <Route path="/dashboard" element={<Dashboard />} />
-                      <Route path="/practice" element={<DifficultySelect />} />
+                      <Route path="/difficultySelect" element={<DifficultySelect />} />
+                      <Route path="/practice" element={<Practice />} />
                       <Route
                         path="/"
                         element={<Navigate replace to="/dashboard" />}
