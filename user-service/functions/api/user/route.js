@@ -96,9 +96,11 @@ async function saveCode(res, admin, uid, questionId, questionDifficulty, questio
 }
 
 async function getSavedCode(res, admin, uid, questionId) {
+  functions.logger.log('start of getSavedCode')
   try {
     const userRef = admin.firestore().collection('users').doc(uid)
     const codeDoc = await userRef.collection('savedCode').doc(questionId).get()
+    functions.logger.log('middle of getSavedCode')
     if (!codeDoc.exists) {
       functions.logger.error('getSavedCode: invalid questionId')
       res.sendStatus(500)
@@ -126,8 +128,8 @@ module.exports = {
       await getUser(res, admin, user)
       return
     } else if (req.params.route === 'getSavedCode') {
-      if (req.body.questionId) {
-        await getSavedCode(res, admin, uid, req.body.questionId)
+      if (req.params.questionId) {
+        await getSavedCode(res, admin, uid, req.params.questionId)
         return
       } else {
         res.sendStatus(400)
