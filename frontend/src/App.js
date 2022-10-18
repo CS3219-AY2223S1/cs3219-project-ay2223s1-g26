@@ -16,6 +16,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "./firebase";
 import axios from "axios";
 import Loader from "./components/Loader";
+import DifficultySelect from "./components/DifficultySelect";
 
 function App() {
   const [user, loading, error] = useAuthState(auth);
@@ -73,7 +74,7 @@ function App() {
                   {user ? (
                     <Routes>
                       <Route path="/dashboard" element={<Dashboard />} />
-                      <Route path="/practice" element={<Practice />} />
+                      <Route path="/practice" element={<DifficultySelect />} />
                       <Route
                         path="/"
                         element={<Navigate replace to="/dashboard" />}
