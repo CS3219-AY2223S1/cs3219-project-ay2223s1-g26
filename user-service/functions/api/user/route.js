@@ -116,8 +116,7 @@ module.exports = {
   _404(req, res) {
     res.sendStatus(404)
   },
-  async post(req, res, admin) {
-    console.log(req.params.route)
+  async get(req, res, admin) {
     const user = await auth.getUser(req, res)
     const uid = user.uid
     if (!uid) {
@@ -126,15 +125,27 @@ module.exports = {
     if (req.params.route === 'getUser') {
       await getUser(res, admin, user)
       return
-    } else if (req.params.route === 'addQuestionAttempt') {
-      if (req.body.questionId, req.body.questionDifficulty, req.body.questionTitle) {
-        await addQuestionAttempt(res, admin, uid, req.body.questionId, req.body.questionDifficulty, req.body.questionTitle)
+    } else if (req.params.route === 'getSavedCode') {
+      if (req.body.questionId) {
+        await getSavedCode(res, admin, uid, req.body.questionId)
         return
       } else {
         res.sendStatus(400)
         return
       }
-    } else if (req.params.route === 'addQuestionAttempt') {
+    } else {
+      res.sendStatus(404)
+      return
+    }
+  },
+  async post(req, res, admin) {
+    console.log(req.params.route)
+    const user = await auth.getUser(req, res)
+    const uid = user.uid
+    if (!uid) {
+      return
+    }
+    if (req.params.route === 'addQuestionAttempt') {
       if (req.body.questionId, req.body.questionDifficulty, req.body.questionTitle) {
         await addQuestionAttempt(res, admin, uid, req.body.questionId, req.body.questionDifficulty, req.body.questionTitle)
         return
@@ -145,14 +156,6 @@ module.exports = {
     } else if (req.params.route === 'saveCode') {
       if (req.body.questionId, req.body.code) {
         await saveCode(res, admin, uid, req.body.questionId, req.body.questionDifficulty, req.body.questionTitle, req.body.code)
-        return
-      } else {
-        res.sendStatus(400)
-        return
-      }
-    } else if (req.params.route === 'getSavedCode') {
-      if (req.body.questionId) {
-        await getSavedCode(res, admin, uid, req.body.questionId)
         return
       } else {
         res.sendStatus(400)
