@@ -9,25 +9,18 @@ import LoadCodeModal from "./LoadCodeModal";
 import { useNavigate } from "react-router";
 import { context } from "../context";
 
-const CommonEditor = ({
-  uuid1,
-  uuid2,
-  roomid,
-  difficulty,
-  questionId,
-  socket,
-}) => {
+const CommonEditor = ({ uuid1, uuid2, roomid, socket, question }) => {
   const navigate = useNavigate();
   // Determine user and partner ID to use based on environment
   const { user, setIsLoading, $axios } = useContext(context);
 
   const [textValue, setTextValue] = useState("");
-  const [loadedCode, setLoadedCode] = useState("");
 
   const [clientSocket, setClientSocket] = useState(false);
   const [partnerLeave, setPartnerLeave] = useState(false);
   const [textChanged, setTextChanged] = useState(true);
   const [openLoadCodeModal, setOpenLoadCodeModal] = useState(false);
+  const [loadedCode, setLoadedCode] = useState("");
 
   useEffect(() => {
     if (!socket) return;
@@ -61,34 +54,45 @@ const CommonEditor = ({
   };
 
   const handleSave = () => {
+    console.log("handle Save is called");
     $axios.post(`${$axios.defaults.baseURL}/saveCode`, {
-      questionId: questionId,
+      questionTitle: question.name,
+      questionId: question._id,
+      questionDifficulty: question.difficulty,
       code: textValue,
     });
     console.log("handleSave: ", {
-      questionId: questionId,
+      questionTitle: question.name,
+      questionId: question._id,
+      questionDifficulty: question.difficulty,
       code: textValue,
     });
   };
 
-  const handleLoadButtonPress = () => {
-    setOpenLoadCodeModal(true);
+  const handleLoadButtonPress = async () => {
+    $axios
+      .get(`${$axios.defaults.baseURL}/getSavedCode?questionId=${question._id}`)
+      .then((code) => {
+        setLoadedCode(code.data);
+      })
+      .then(() => setOpenLoadCodeModal(true));
   };
 
   const handleRestoreCode = (code) => {
+    handleChangeEmitted(code);
     setTextValue(code);
   };
 
   const handleCompleted = () => {
     $axios.post(`${$axios.defaults.baseURL}/addQuestionAttempt`, {
-      questionId: questionId,
-      questionDifficulty: difficulty,
-      questionTitle: "TBC",
+      questionId: question._id,
+      questionDifficulty: question.difficulty,
+      questionTitle: question.name,
     });
     console.log("handleCompleted: ", {
-      questionId: questionId,
-      questionDifficulty: difficulty,
-      questionTitle: "TBC",
+      questionId: question._id,
+      questionDifficulty: question.difficulty,
+      questionTitle: question.name,
     });
   };
 
@@ -104,6 +108,7 @@ const CommonEditor = ({
       <LoadCodeModal
         openLoadCodeModal={openLoadCodeModal}
         setOpenLoadCodeModal={setOpenLoadCodeModal}
+        loadedCode={loadedCode}
         setLoadedCode={setLoadedCode}
         handleRestoreCode={handleRestoreCode}
       />

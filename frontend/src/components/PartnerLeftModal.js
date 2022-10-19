@@ -37,8 +37,6 @@ const PartnerLeftModal = ({
     navigate("/dashboard");
   };
 
-  console.log("open: ", partnerLeave);
-
   return (
     <Modal isOpen={partnerLeave} style={modalStyle}>
       <h1>Partner has left the session</h1>

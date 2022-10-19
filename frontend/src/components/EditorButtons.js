@@ -17,6 +17,7 @@ const EditorButtons = ({
   };
 
   const handleSaveButtonPress = () => {
+    console.log("save button press");
     handleSave();
     setTextChanged(false);
   };
