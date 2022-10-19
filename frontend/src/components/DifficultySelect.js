@@ -51,7 +51,7 @@ function DifficultySelect() {
     });
 
     msSocket.on("deregister_failed", () => {
-      msSocket.emit("deregister");
+      msSocket.emit("deregister",user.user.uid);
     });
   }, []);
 
@@ -87,6 +87,7 @@ function DifficultySelect() {
     } else {
       //Stop loading spinner
       //Enable the buttons
+      msSocket.emit("deregister", user.user.uid);
       document.getElementById("circularProgress").style.display = "none";
       setButtonsEnabled(true);
     }

@@ -54,7 +54,7 @@ io.on("connection", (socket) => {
     socket.on('deregister', async function(uuidField) {
         const waitee = await deleteWaitingQuery(uuidField);
         if (waitee == null) {
-            //socket.emit("deregister_failed");
+            socket.emit("deregister_failed");
         }
         socket.emit("deregister_success");
     })
