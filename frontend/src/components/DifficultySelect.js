@@ -1,4 +1,12 @@
-import { ButtonGroup, Button, Grid, Typography, Snackbar, Alert, CircularProgress } from "@mui/material";
+import {
+  ButtonGroup,
+  Button,
+  Grid,
+  Typography,
+  Snackbar,
+  Alert,
+  CircularProgress,
+} from "@mui/material";
 import { useEffect, useState, useCallback, useContext } from "react";
 import { io } from "socket.io-client";
 import { useNavigate } from "react-router-dom";
@@ -46,12 +54,11 @@ function DifficultySelect() {
     );
 
     msSocket.on("deregister_success", () => {
-      console.log("deregister_success");
       setIsConnecting(false);
     });
 
     msSocket.on("deregister_failed", () => {
-      msSocket.emit("deregister",user.user.uid);
+      msSocket.emit("deregister", user.user.uid);
     });
   }, []);
 
@@ -115,13 +122,15 @@ function DifficultySelect() {
     });
   };
 
-  const [timeoutSnackbarOpen, setTimeoutSnackBarOpen] = useState(false)
+  const [timeoutSnackbarOpen, setTimeoutSnackBarOpen] = useState(false);
   const toggleTimeoutSnackBar = () => {
-    timeoutSnackbarOpen ? setTimeoutSnackBarOpen(false) : setTimeoutSnackBarOpen(true)
-  }
+    timeoutSnackbarOpen
+      ? setTimeoutSnackBarOpen(false)
+      : setTimeoutSnackBarOpen(true);
+  };
 
   const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
+    if (reason === "clickaway") {
       return;
     }
 
@@ -153,7 +162,7 @@ function DifficultySelect() {
               onClick={() => {
                 handleDifficultyButton(Difficulty.Easy);
               }}
-              disabled = {!buttonsEnabled}
+              disabled={!buttonsEnabled}
             >
               Easy
             </Button>
@@ -161,7 +170,7 @@ function DifficultySelect() {
               onClick={() => {
                 handleDifficultyButton(Difficulty.Medium);
               }}
-              disabled = {!buttonsEnabled}
+              disabled={!buttonsEnabled}
             >
               Medium
             </Button>
@@ -169,20 +178,27 @@ function DifficultySelect() {
               onClick={() => {
                 handleDifficultyButton(Difficulty.Hard);
               }}
-              disabled = {!buttonsEnabled}
+              disabled={!buttonsEnabled}
             >
               Hard
             </Button>
           </ButtonGroup>
         </Grid>
         <Grid item>
-          <div id = "circularProgress" display = "none">
+          <div id="circularProgress" display="none">
             <CircularProgress />
           </div>
         </Grid>
       </Grid>
-      <Snackbar open={timeoutSnackbarOpen} autoHideDuration={6000} onClose={handleClose} anchorOrigin = {{vertical:'bottom', horizontal:'right'}}>
-        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>No match could be found! Returning to difficulty select.</Alert>
+      <Snackbar
+        open={timeoutSnackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+      >
+        <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
+          No match could be found! Returning to difficulty select.
+        </Alert>
       </Snackbar>
     </div>
   );

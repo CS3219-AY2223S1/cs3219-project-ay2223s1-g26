@@ -6,7 +6,7 @@ const QuestionBox = ({ questionProp }) => {
   const [question, setQuestion] = useState("");
 
   useEffect(() => {
-    setQuestion(questionProp);
+    setQuestion(questionProp.question);
   }, [questionProp]);
 
   return (

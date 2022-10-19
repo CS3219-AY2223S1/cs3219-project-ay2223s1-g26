@@ -19,8 +19,7 @@ function Practice() {
   const [uuid2, setUuid2] = useState(null);
   const [difficulty, setDifficulty] = useState(null);
   const [roomid, setRoomid] = useState(null);
-  const [question, setQuestion] = useState();
-  const [questionId, setQuestionId] = useState();
+  const [question, setQuestion] = useState({});
 
   useEffect(() => {
     if (process.env.REACT_APP_ENV === "dev_1") {
@@ -58,8 +57,11 @@ function Practice() {
         fetch(QUESTIONS[difficulty])
           .then((res) => res.text())
           .then((qn) => setQuestion(qn));
-        setQuestion(QUESTIONS[difficulty]);
-        setQuestionId(123);
+        setQuestion({
+          _id: 123,
+          name: "AddTwoNumbers",
+          difficulty: difficulty,
+        });
       } else {
         let intSeed = 0;
         for (let c of roomid) {
@@ -67,10 +69,9 @@ function Practice() {
         }
         const request = `http://localhost:3005/questions?difficulty=${difficulty}&seed=${intSeed}`;
         const question = await axios.get(request).catch((err) => {
-          console.log("error fetching qn: ", err);
+          console.log("error fetching qn: ", location.state?.difficulty);
         });
-        setQuestion(question?.data?.data?.question);
-        setQuestionId(question?.data?.data?._id);
+        setQuestion(question?.data?.data);
       }
     };
 
@@ -91,8 +92,7 @@ function Practice() {
         uuid1={uuid1}
         uuid2={uuid2}
         roomid={roomid}
-        difficulty={difficulty}
-        questionId={questionId}
+        question={question}
         socket={socket}
       />
     </div>
