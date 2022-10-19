@@ -6,6 +6,7 @@ const EditorButtons = ({
   handleLeave,
   handleSave,
   handleCompleted,
+  handleLoadButtonPress,
   textChanged,
   setTextChanged,
 }) => {
@@ -29,6 +30,16 @@ const EditorButtons = ({
       display="flex"
       style={{ paddingTop: "1vh" }}
     >
+      <Button
+        size="large"
+        variant="outlined"
+        width="20%"
+        style={buttonStyle}
+        onClick={handleLoadButtonPress}
+        disabled={!textChanged}
+      >
+        {"Load"}
+      </Button>
       <Button
         size="large"
         variant="outlined"
