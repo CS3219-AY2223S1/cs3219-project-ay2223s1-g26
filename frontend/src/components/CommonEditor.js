@@ -4,6 +4,7 @@ import Editor from "@monaco-editor/react";
 import "./CommonEditor.css";
 import EditorButtons from "./EditorButtons";
 import PartnerLeftModal from "./PartnerLeftModal";
+import LoadCodeModal from "./LoadCodeModal";
 
 import { useNavigate } from "react-router";
 import { context } from "../context";
@@ -21,9 +22,12 @@ const CommonEditor = ({
   const { user, setIsLoading, $axios } = useContext(context);
 
   const [textValue, setTextValue] = useState("");
-  const [clientSocket, setClientSocket] = useState();
+  const [loadedCode, setLoadedCode] = useState("");
+
+  const [clientSocket, setClientSocket] = useState(false);
   const [partnerLeave, setPartnerLeave] = useState(false);
   const [textChanged, setTextChanged] = useState(true);
+  const [openLoadCodeModal, setOpenLoadCodeModal] = useState(false);
 
   useEffect(() => {
     if (!socket) return;
@@ -67,6 +71,14 @@ const CommonEditor = ({
     });
   };
 
+  const handleLoadButtonPress = () => {
+    setOpenLoadCodeModal(true);
+  };
+
+  const handleRestoreCode = (code) => {
+    setTextValue(code);
+  };
+
   const handleCompleted = () => {
     $axios.post(`${$axios.defaults.baseURL}/addQuestionAttempt`, {
       questionId: questionId,
@@ -89,6 +101,12 @@ const CommonEditor = ({
         textChanged={textChanged}
         setTextChanged={setTextChanged}
       />
+      <LoadCodeModal
+        openLoadCodeModal={openLoadCodeModal}
+        setOpenLoadCodeModal={setOpenLoadCodeModal}
+        setLoadedCode={setLoadedCode}
+        handleRestoreCode={handleRestoreCode}
+      />
       <div className="editorAndButtonsContainer">
         <div className="commonEditor">
           <Editor
@@ -105,6 +123,7 @@ const CommonEditor = ({
             handleCompleted={handleCompleted}
             textChanged={textChanged}
             setTextChanged={setTextChanged}
+            handleLoadButtonPress={handleLoadButtonPress}
           />
         </div>
       </div>
