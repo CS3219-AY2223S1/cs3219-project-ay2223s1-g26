@@ -13,6 +13,7 @@ const password = process.env.AWS_DB_PASSWORD;
 const port = process.env.AWS_DB_PORT;
 
 console.log(user);
+const sequelize = connectPostgres();
 
 export class Waiting extends Model {
 }
@@ -51,14 +52,12 @@ function initWaitingModel(sequelize) {
 }
 
 export async function runQuery() {
-    const sequelize = connectPostgres();
     initWaitingModel(sequelize);
     const waitingUsers = await Waiting.findAll();
     return waitingUsers;
 }
 
 export async function readWaitingQuery(difficultyField) {
-    const sequelize = connectPostgres(); 
     initWaitingModel(sequelize);
     const waitingUsers = await Waiting.findAll({
         order: [['time', 'ASC']],
@@ -70,7 +69,6 @@ export async function readWaitingQuery(difficultyField) {
 }
 
 export async function insertWaitingQuery(uuidField, difficultyField) {
-    const sequelize = connectPostgres();
     initWaitingModel(sequelize);
     const timeField = getTime();
     const waitee = await Waiting.findByPk(uuidField);
@@ -82,7 +80,6 @@ export async function insertWaitingQuery(uuidField, difficultyField) {
 }
 
 export async function deleteWaitingQuery(uuidField) {
-    const sequelize = connectPostgres();
     initWaitingModel(sequelize);
     const waitee = await Waiting.findByPk(uuidField);
     if (waitee == null) {
