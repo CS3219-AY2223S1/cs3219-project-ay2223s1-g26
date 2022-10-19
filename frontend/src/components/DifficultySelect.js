@@ -80,7 +80,7 @@ function DifficultySelect() {
         toggleTimeoutSnackBar();
         setDifficulty(null);
         setButtonsEnabled(true);
-      }, 3000);
+      }, 30000);
       //Disable the buttons
       setButtonsEnabled(false);
       document.getElementById("circularProgress").style.display = "block";
