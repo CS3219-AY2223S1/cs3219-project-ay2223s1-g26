@@ -51,12 +51,13 @@ io.on("connection", (socket) => {
         }
     })
     
-    socket.on('deregister', async function(uuidField) {
+    socket.on('deregister', async function(uuidField, numberOfRetries) {
         const waitee = await deleteWaitingQuery(uuidField);
         if (waitee == null) {
-            socket.emit("deregister_failed");
+          socket.emit("deregister_failed", numberOfRetries);
+        } else {
+          socket.emit("deregister_success");
         }
-        socket.emit("deregister_success");
     })
 })
 

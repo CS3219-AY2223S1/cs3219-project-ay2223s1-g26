@@ -24,7 +24,7 @@ var timer;
 //Can implement a stepper here
 function DifficultySelect() {
   const [difficulty, setDifficulty] = useState();
-  const [isConnecting, setIsConnecting] = useState(false);
+  const [isConnecting, setIsConnecting] = useState(null);
   const [isMatched, setIsMatched] = useState(false);
   const [partnerUuid, setPartnerUuid] = useState();
   const [roomUuid, setRoomUuid] = useState();
@@ -49,16 +49,21 @@ function DifficultySelect() {
         setPartnerUuid(partnerUuid);
         setRoomUuid(roomUuid);
         setQuestionSeed(questionSeed);
-        msSocket.emit("deregister");
       }
     );
 
     msSocket.on("deregister_success", () => {
+      console.log("deregister_success");
       setIsConnecting(false);
     });
 
-    msSocket.on("deregister_failed", () => {
-      msSocket.emit("deregister", user.user.uid);
+    msSocket.on("deregister_failed", (numberOfRetries) => {
+      if (numberOfRetries == 3) {
+        return;
+      } else {
+        console.log("deregister_failed retry called")
+        msSocket.emit("deregister", user.user.uid, numberOfRetries + 1);
+      }
     });
   }, []);
 
@@ -81,7 +86,7 @@ function DifficultySelect() {
   //Connecting hook
   useEffect(() => {
     console.log("isConnecting: " + isConnecting);
-    if (isConnecting) {
+    if (isConnecting == true) {
       timer = setTimeout(() => {
         setIsConnecting(false);
         toggleTimeoutSnackBar();
@@ -91,12 +96,15 @@ function DifficultySelect() {
       //Disable the buttons
       setButtonsEnabled(false);
       document.getElementById("circularProgress").style.display = "block";
-    } else {
+    } else if (isConnecting == false) {
       //Stop loading spinner
       //Enable the buttons
       msSocket.emit("deregister", user.user.uid);
       document.getElementById("circularProgress").style.display = "none";
       setButtonsEnabled(true);
+    } else {
+      document.getElementById("circularProgress").style.display = "none";
+      return;
     }
   }, [isConnecting]);
 
