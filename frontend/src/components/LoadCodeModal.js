@@ -29,33 +29,25 @@ const LoadCodeModal = ({
 
   return (
     <Modal isOpen={openLoadCodeModal}>
-      <>
-        <h1>Below is your most recently saved code</h1>
-        <p>{loadedCode}</p>
-        <h2>
+      <div className="loadCodeModalContainer">
+        <h1 style={{ textAlign: "center" }}>
+          Below is your most recently saved code
+        </h1>
+        <code>{loadedCode}</code>
+        <h2 style={{ textAlign: "center" }}>
           Would you like to restore it to this session? Your partner will
           receive this saved code as well
         </h2>
-        <Stack
-          spacing={2}
-          direction="row"
-          justifyContent="space-evenly"
-          alignItems="center"
-          height="10%"
-          display="flex"
-          style={{ padding: "1vh 2vw" }}
+        <Button
+          size="large"
+          variant="outlined"
+          width="20%"
+          style={buttonStyle}
+          onClick={handleRestoreButtonPress}
         >
-          <Button
-            size="large"
-            variant="outlined"
-            width="20%"
-            style={buttonStyle}
-            onClick={handleRestoreButtonPress}
-          >
-            {"Restore to Session"}
-          </Button>
-        </Stack>
-      </>
+          {"Restore to session"}
+        </Button>
+      </div>
     </Modal>
   );
 };
