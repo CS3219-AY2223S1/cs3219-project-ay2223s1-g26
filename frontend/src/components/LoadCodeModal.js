@@ -5,6 +5,8 @@ import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import { context } from "../context";
 
+import "./LoadCodeModal.css";
+
 const LoadCodeModal = ({
   openLoadCodeModal,
   setOpenLoadCodeModal,
@@ -33,7 +35,9 @@ const LoadCodeModal = ({
         <h1 style={{ textAlign: "center" }}>
           Below is your most recently saved code
         </h1>
-        <code>{loadedCode}</code>
+        <pre>
+          <code>{loadedCode}</code>
+        </pre>
         <h2 style={{ textAlign: "center" }}>
           Would you like to restore it to this session? Your partner will
           receive this saved code as well

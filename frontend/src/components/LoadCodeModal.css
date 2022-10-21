@@ -2,6 +2,24 @@
     display: flex;
     justify-content: center;
     align-content: center;
-    padding: 5vw 5vh;
+    flex-direction: column;
+    padding: 10vh 20vw;
 }
+
+pre {
+    background: #eee;
+    padding: 5rem 7rem;
+    overflow: auto;
+    border-radius: 3px;
+  }
+  
+  pre code {
+      text-align: left;
+      white-space: pre;
+      word-spacing: normal;
+      word-break: normal;
+      word-wrap: normal;
+      line-height: 1.5;
+  }
+
 
