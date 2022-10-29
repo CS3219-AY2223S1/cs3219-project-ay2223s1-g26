@@ -1,13 +1,7 @@
-.editorAndButtonsContainer{
+.commoneditorContainer{
     width: 50%;
-    height: 100%;
+    height: 80vh;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: "space-around";
-}
-
-.commonEditor {
-    height: 90%;
-    width: 100%;
+    flex-direction: row;
+    align-items: flex-start;
 }

@@ -1,21 +1,7 @@
 .practiceContainer {
     width: 90vw;
-    height: 83vh;
+    height: 80vh;
     display: flex;
     flex-direction: row;
     align-items: flex-start;
-}
-
-.questionAndChat {
-    width: 50%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-}
-
-.editorAndButtons {
-    width: 50%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
 }

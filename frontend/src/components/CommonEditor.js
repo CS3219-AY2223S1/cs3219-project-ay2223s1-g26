@@ -1,138 +1,75 @@
 import * as React from "react";
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import Editor from "@monaco-editor/react";
+import LANGUAGES from "../resources/languages";
 import "./CommonEditor.css";
-import EditorButtons from "./EditorButtons";
-import PartnerLeftModal from "./PartnerLeftModal";
-import LoadCodeModal from "./LoadCodeModal";
 
-import { useNavigate } from "react-router";
-import { context } from "../context";
+const { io } = require("socket.io-client");
 
-const CommonEditor = ({ uuid1, uuid2, roomid, socket, question }) => {
-  const navigate = useNavigate();
+// Only for dev environment, to simulate 2 clients
+let USER_ID;
+let PARTNER_ID;
+let ROOM_ID;
+
+const CommonEditor = ({ uuid1, uuid2, roomid, difficulty }) => {
+  console.log("env: ", process.env.REACT_APP_ENV);
   // Determine user and partner ID to use based on environment
-  const { user, setIsLoading, $axios } = useContext(context);
+  if (process.env.REACT_APP_ENV === "dev_1") {
+    USER_ID = process.env.REACT_APP_USER1;
+    PARTNER_ID = process.env.REACT_APP_USER2;
+    ROOM_ID = 1234567;
+  } else if (process.env.REACT_APP_ENV === "dev_2") {
+    USER_ID = process.env.REACT_APP_USER2;
+    PARTNER_ID = process.env.REACT_APP_USER1;
+    ROOM_ID = 1234567;
+  } else if (process.env.REACT_APP_ENV === "prod_1") {
+    USER_ID = uuid1;
+    PARTNER_ID = uuid2;
+    ROOM_ID = 1234567;
+  } else if (process.env.REACT_APP_ENV === "prod_2") {
+    USER_ID = uuid2;
+    PARTNER_ID = uuid1;
+    ROOM_ID = 1234567;
+  }
 
+  // TODO: temporary
   const [textValue, setTextValue] = useState("");
-
-  const [clientSocket, setClientSocket] = useState(false);
-  const [partnerLeave, setPartnerLeave] = useState(false);
-  const [textChanged, setTextChanged] = useState(true);
-  const [openLoadCodeModal, setOpenLoadCodeModal] = useState(false);
-  const [loadedCode, setLoadedCode] = useState("");
-
+  const [clientSocket, setClientSocket] = useState();
   useEffect(() => {
-    if (!socket) return;
+    console.log("room_id: ", ROOM_ID);
+    let socket = io("http://localhost:8081");
     socket.on("connect", () => {
-      socket.emit("match", { uuid1, uuid2, roomid });
+      console.log(socket.id);
+      socket.emit("match", { USER_ID, PARTNER_ID, ROOM_ID });
     });
     socket.on("text", handleChangeReceived);
-    socket.on("left", handlePartnerLeave);
+    socket.on("confirmed", console.log("confirmed"));
     setClientSocket(socket);
-  }, [uuid1, uuid2, roomid, socket]);
+  }, []);
 
   const handleChangeEmitted = (text) => {
-    setTextChanged(true);
+    console.log(text);
+    console.log("change emitted: ", text);
     setTextValue(text);
     clientSocket.emit("text", text);
   };
 
   const handleChangeReceived = (text) => {
-    setTextChanged(true);
+    console.log("received: ", text);
     setTextValue(text);
   };
 
-  const handleLeave = () => {
-    clientSocket.emit("leave");
-    clientSocket.close();
-    navigate("/dashboard");
-  };
-
-  const handlePartnerLeave = () => {
-    setPartnerLeave(true);
-  };
-
-  const handleSave = () => {
-    console.log("handle Save is called");
-    $axios.post(`${$axios.defaults.baseURL}/saveCode`, {
-      questionTitle: question.name,
-      questionId: question._id,
-      questionDifficulty: question.difficulty,
-      code: textValue,
-    });
-    console.log("handleSave: ", {
-      questionTitle: question.name,
-      questionId: question._id,
-      questionDifficulty: question.difficulty,
-      code: textValue,
-    });
-  };
-
-  const handleLoadButtonPress = async () => {
-    $axios
-      .get(`${$axios.defaults.baseURL}/getSavedCode?questionId=${question._id}`)
-      .then((code) => {
-        setLoadedCode(code.data);
-      })
-      .then(() => setOpenLoadCodeModal(true));
-  };
-
-  const handleRestoreCode = (code) => {
-    handleChangeEmitted(code);
-    setTextValue(code);
-  };
-
-  const handleCompleted = () => {
-    $axios.post(`${$axios.defaults.baseURL}/addQuestionAttempt`, {
-      questionId: question._id,
-      questionDifficulty: question.difficulty,
-      questionTitle: question.name,
-    });
-    console.log("handleCompleted: ", {
-      questionId: question._id,
-      questionDifficulty: question.difficulty,
-      questionTitle: question.name,
-    });
-  };
-
   return (
-    <>
-      <PartnerLeftModal
-        partnerLeave={partnerLeave}
-        handleCompleted={handleCompleted}
-        handleSave={handleSave}
-        textChanged={textChanged}
-        setTextChanged={setTextChanged}
+    <div className="commoneditorContainer">
+      <Editor
+        height="85vh"
+        defaultLanguage="javascript"
+        defaultValue="Type your code here"
+        theme="vs-dark"
+        onChange={handleChangeEmitted}
+        value={textValue}
       />
-      <LoadCodeModal
-        openLoadCodeModal={openLoadCodeModal}
-        setOpenLoadCodeModal={setOpenLoadCodeModal}
-        loadedCode={loadedCode}
-        setLoadedCode={setLoadedCode}
-        handleRestoreCode={handleRestoreCode}
-      />
-      <div className="editorAndButtonsContainer">
-        <div className="commonEditor">
-          <Editor
-            height="100%"
-            defaultLanguage="javascript"
-            defaultValue="Type your code here"
-            theme="vs-dark"
-            onChange={handleChangeEmitted}
-            value={textValue}
-          />
-          <EditorButtons
-            handleLeave={handleLeave}
-            handleSave={handleSave}
-            handleCompleted={handleCompleted}
-            textChanged={textChanged}
-            setTextChanged={setTextChanged}
-            handleLoadButtonPress={handleLoadButtonPress}
-          />
-        </div>
-      </div>
-    </>
+    </div>
   );
 };
 
