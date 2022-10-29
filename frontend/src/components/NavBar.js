@@ -12,36 +12,36 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../firebase";
 import { signOut } from "firebase/auth";
-import { userContext } from '../userContext';
+import { context } from '../context';
 
 function NavBar() {
-  const value = React.useContext(userContext)
+  const value = React.useContext(context)
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [user, loading, error] = useAuthState(auth);
   const navigate = useNavigate();
-  const pages = user
-    ? ['Dashboard', 'Practice']
-    : ['Login'];
-
+  const pages = loading
+    ? []
+    : user
+      ? ['Dashboard', 'Practice']
+      : ['Login'];
   const settings = ['Logout'];
-  
+  const pageMap = {
+    'Dashboard': 'dashboard',
+    'Login': 'login',
+    'Practice': 'difficultySelect',
+  }
   React.useEffect(() => {
-    if (loading) {
-      // maybe trigger a loading screen
-      return;
-    }
     if (user) {
       navigate("/dashboard");
     }
-  }, [user, loading]);
+  }, [user]);
 
   React.useEffect(() => {
-    if (!user) {
+    if (!user && !loading) {
       navigate("/login");
     }
   }, [user]);
@@ -68,7 +68,6 @@ function NavBar() {
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
           <Typography
             variant="h6"
             noWrap
@@ -121,7 +120,7 @@ function NavBar() {
                   <Typography textAlign="center">
                   <Link 
                     style={{ textDecoration: "none", color: "black" }}
-                    to={`/${page}`}>
+                    to={`/${pageMap[page]}`}>
                     {page}
                   </Link>
                   </Typography>
@@ -129,7 +128,6 @@ function NavBar() {
               ))}
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
           <Typography
             variant="h5"
             noWrap
@@ -157,7 +155,7 @@ function NavBar() {
               >
                 <Link 
                   style={{ textDecoration: "none", color: "white" }}
-                  to={`/${page}`}>
+                  to={`/${pageMap[page]}`}>
                   {page}
                 </Link>
               </Button>

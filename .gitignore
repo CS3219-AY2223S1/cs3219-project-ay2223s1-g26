@@ -3,10 +3,8 @@ node_modules
 user-service/firebase-debug.log
 user-service/firestore-debug.log
 user-service/ui-debug.log
-user-service/node_modules/
 user-service/.env.json
 frontend/.env.json
-frontend/node_modules/
 frontend/src/.env.json
 .env
 
