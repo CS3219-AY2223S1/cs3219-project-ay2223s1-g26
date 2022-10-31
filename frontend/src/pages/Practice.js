@@ -67,7 +67,10 @@ function Practice() {
         for (let c of roomid) {
           if (!Number.isNaN(parseInt(c))) intSeed += parseInt(c);
         }
-        const request = `http://localhost:3005/questions?difficulty=${difficulty}&seed=${intSeed}`;
+        // const request = process.env.NODE_ENV == "development" 
+        //   ? `http://localhost:3005/questions?difficulty=${difficulty}&seed=${intSeed}`
+        //   : `question-service-load-balancer-1091982636.ap-southeast-1.elb.amazonaws.com/questions?difficulty=${difficulty}&seed=${intSeed}`;
+        const request = `question-service-load-balancer-1091982636.ap-southeast-1.elb.amazonaws.com/questions?difficulty=${difficulty}&seed=${intSeed}`;
         const question = await axios.get(request).catch((err) => {
           console.log("error fetching qn: ", location.state?.difficulty);
         });
@@ -79,7 +82,10 @@ function Practice() {
   }, [location.state, roomid, difficulty]);
 
   useEffect(() => {
-    setSocket(io("http://localhost:8081"));
+    const csEndpoint = process.env.NODE_ENV == "development"
+    ? "http://localhost:8081"
+    : "collab-network-load-balancer-0122fd4415edad18.elb.ap-southeast-1.amazonaws.com"
+    setSocket(io("collab-network-load-balancer-0122fd4415edad18.elb.ap-southeast-1.amazonaws.com"));
   }, []);
 
   return (

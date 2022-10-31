@@ -19,6 +19,7 @@ import DifficultySelect from "./components/DifficultySelect";
 import Practice from "./pages/Practice";
 
 function App() {
+  console.log(process.env.NODE_ENV);
   const [user, loading, error] = useAuthState(auth);
   const [isLoading, setIsLoading] = React.useState(false);
   const api =
