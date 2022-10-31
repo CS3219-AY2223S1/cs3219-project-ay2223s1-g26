@@ -73,6 +73,7 @@ function Practice() {
         const request = `question-service-load-balancer-1091982636.ap-southeast-1.elb.amazonaws.com/questions?difficulty=${difficulty}&seed=${intSeed}`;
         const question = await axios.get(request).catch((err) => {
           console.log("error fetching qn: ", location.state?.difficulty);
+          console.log(err);
         });
         setQuestion(question?.data?.data);
       }
