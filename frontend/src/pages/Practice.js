@@ -22,28 +22,10 @@ function Practice() {
   const [question, setQuestion] = useState({});
 
   useEffect(() => {
-    if (process.env.REACT_APP_ENV === "dev_1") {
-      setUuid1(process.env.REACT_APP_USER1);
-      setUuid2(process.env.REACT_APP_USER2);
-      setRoomid(1234567);
-      setDifficulty("MEDIUM");
-    } else if (process.env.REACT_APP_ENV === "dev_2") {
-      setUuid1(process.env.REACT_APP_USER1);
-      setUuid2(process.env.REACT_APP_USER2);
-      setRoomid(1234567);
-      setDifficulty("MEDIUM");
-    } else if (process.env.REACT_APP_ENV === "prod_1") {
-      setUuid1(location.state?.uuid1);
-      setUuid2(location.state?.uuid2);
-      setRoomid(location.state?.roomUuid);
-      setDifficulty(location.state?.difficulty?.toUpperCase());
-    } else if (process.env.REACT_APP_ENV === "prod_2") {
-      setUuid1(location.state?.uuid2);
-      setUuid2(location.state?.uuid1);
-      setRoomid(location.state?.roomUuid);
-      setDifficulty(location.state?.difficulty?.toUpperCase());
-    }
-    console.log("roomID", roomid);
+    setUuid1(location.state?.uuid1);
+    setUuid2(location.state?.uuid2);
+    setRoomid(location.state?.roomUuid);
+    setDifficulty(location.state?.difficulty?.toUpperCase());
 
     const fetchQuestion = async () => {
       const QUESTIONS = {
@@ -51,42 +33,29 @@ function Practice() {
         MEDIUM: MediumQuestion,
         HARD: HardQuestion,
       };
-
-      if (process.env.REACT_APP_ENV.substring(0, 3) === "dev") {
-        console.log("setting question: ", QUESTIONS[difficulty]);
-        fetch(QUESTIONS[difficulty])
-          .then((res) => res.text())
-          .then((qn) => setQuestion(qn));
-        setQuestion({
-          _id: 123,
-          name: "AddTwoNumbers",
-          difficulty: difficulty,
-        });
-      } else {
-        let intSeed = 0;
-        for (let c of roomid) {
-          if (!Number.isNaN(parseInt(c))) intSeed += parseInt(c);
-        }
-        // const request = process.env.NODE_ENV == "development" 
-        //   ? `http://localhost:3005/questions?difficulty=${difficulty}&seed=${intSeed}`
-        //   : `question-service-load-balancer-1091982636.ap-southeast-1.elb.amazonaws.com/questions?difficulty=${difficulty}&seed=${intSeed}`;
-        const request = `http://question-service-load-balancer-1091982636.ap-southeast-1.elb.amazonaws.com/questions?difficulty=${difficulty}&seed=${intSeed}`;
-        const question = await axios.get(request).catch((err) => {
-          console.log("error fetching qn: ", location.state?.difficulty);
-          console.log(err);
-        });
-        setQuestion(question?.data?.data);
+      let intSeed = 0;
+      for (let c of roomid) {
+        if (!Number.isNaN(parseInt(c))) intSeed += parseInt(c);
       }
+      const request = `http://question-service-load-balancer-1091982636.ap-southeast-1.elb.amazonaws.com/questions?difficulty=${difficulty}&seed=${intSeed}`;
+      const question = await axios.get(request).catch((err) => {
+        console.log("error fetching qn: ", location.state?.difficulty);
+        console.log(err);
+      });
+      setQuestion(question?.data?.data);
     };
 
     if (roomid) fetchQuestion();
   }, [location.state, roomid, difficulty]);
 
   useEffect(() => {
-    const csEndpoint = process.env.NODE_ENV == "development"
-    ? "http://localhost:8081"
-    : "collab-network-load-balancer-0122fd4415edad18.elb.ap-southeast-1.amazonaws.com"
-    setSocket(io("collab-network-load-balancer-0122fd4415edad18.elb.ap-southeast-1.amazonaws.com"));
+    const csEndpoint =
+      "collab-network-load-balancer-0122fd4415edad18.elb.ap-southeast-1.amazonaws.com";
+    setSocket(
+      io(
+        "collab-network-load-balancer-0122fd4415edad18.elb.ap-southeast-1.amazonaws.com"
+      )
+    );
   }, []);
 
   return (

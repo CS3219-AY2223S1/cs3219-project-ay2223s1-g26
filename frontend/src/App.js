@@ -19,13 +19,9 @@ import DifficultySelect from "./components/DifficultySelect";
 import Practice from "./pages/Practice";
 
 function App() {
-  console.log(process.env.NODE_ENV);
   const [user, loading, error] = useAuthState(auth);
   const [isLoading, setIsLoading] = React.useState(false);
-  const api =
-    process.env.NODE_ENV == "development"
-      ? "http://localhost:5000/api"
-      : "https://us-central1-peerprep-userser.cloudfunctions.net/api";
+  const api = "https://us-central1-peerprep-userser.cloudfunctions.net/api";
   const defaultOptions = {
     baseURL: api,
     headers: {
@@ -75,7 +71,10 @@ function App() {
                   {user ? (
                     <Routes>
                       <Route path="/dashboard" element={<Dashboard />} />
-                      <Route path="/difficultySelect" element={<DifficultySelect />} />
+                      <Route
+                        path="/difficultySelect"
+                        element={<DifficultySelect />}
+                      />
                       <Route path="/practice" element={<Practice />} />
                       <Route
                         path="/"
