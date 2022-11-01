@@ -21,10 +21,6 @@ const Difficulty = {
 var msSocket;
 var timer;
 
-const msEndpoint = process.env.NODE_ENV == "development"
-  ? "http://localhost:3000"
-  : "matching-network-load-balancer-dae844dd94888ac6.elb.ap-southeast-1.amazonaws.com"
-
 //Can implement a stepper here
 function DifficultySelect() {
   const [difficulty, setDifficulty] = useState();
@@ -38,7 +34,9 @@ function DifficultySelect() {
   console.log("user gotten from context: ", user?.user?.uid);
 
   useEffect(() => {
-    msSocket = io("matching-network-load-balancer-dae844dd94888ac6.elb.ap-southeast-1.amazonaws.com");
+    msSocket = io(
+      "matching-network-load-balancer-dae844dd94888ac6.elb.ap-southeast-1.amazonaws.com"
+    );
 
     msSocket.on("connected", () => {
       console.log("connected to match service!");
@@ -62,14 +60,14 @@ function DifficultySelect() {
     });
 
     msSocket.on("deregister_failed", (numberOfRetries) => {
-      if (numberOfRetries == 3) {
+      if (numberOfRetries === 3) {
         return;
       } else {
-        console.log("deregister_failed retry called")
+        console.log("deregister_failed retry called");
         msSocket.emit("deregister", user.user.uid, numberOfRetries + 1);
       }
     });
-  }, []);
+  }, [user.user.uid]);
 
   useEffect(() => {
     if (isMatched) {
@@ -90,7 +88,7 @@ function DifficultySelect() {
   //Connecting hook
   useEffect(() => {
     console.log("isConnecting: " + isConnecting);
-    if (isConnecting == true) {
+    if (isConnecting === true) {
       timer = setTimeout(() => {
         setIsConnecting(false);
         toggleTimeoutSnackBar();

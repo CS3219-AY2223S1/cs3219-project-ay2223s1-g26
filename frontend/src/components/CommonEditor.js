@@ -12,7 +12,7 @@ import { context } from "../context";
 const CommonEditor = ({ uuid1, uuid2, roomid, socket, question }) => {
   const navigate = useNavigate();
   // Determine user and partner ID to use based on environment
-  const { user, setIsLoading, $axios } = useContext(context);
+  const { $axios } = useContext(context);
 
   const [textValue, setTextValue] = useState("");
 
