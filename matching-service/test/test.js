@@ -78,9 +78,3 @@ describe("Waiting", () => {
         })
     })
 })
-
-chai.use(chaiHttp);
-var assert = chai.assert;
-
-
-
