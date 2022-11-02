@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useEffect, useState, } from 'react';
 import CircularProgress, {
   CircularProgressProps,
 } from '@mui/material/CircularProgress';
@@ -8,7 +9,18 @@ import Backdrop from '@mui/material/Backdrop';
 import { matchRoutes } from 'react-router-dom';
 
 export default function TimedLoader(props) {
-  console.log(props)
+  const [value, setValue] = useState(0)
+
+  useEffect(() => {
+    const valueIncrementer = setInterval(() => {
+      setValue((prev) => prev >= 30 ? 0 : prev + 1)
+    }, 1000)
+    return () => {
+      clearInterval(valueIncrementer)
+      setValue(0)
+    }
+  }, [props.loading])
+
   return (
     <div>
       <Typography
@@ -24,7 +36,7 @@ export default function TimedLoader(props) {
         open={props.loading}
       >
         <Box>
-          <CircularProgress variant="determinate" value={props.value * 100/30} />
+          <CircularProgress variant="determinate" value={value * 100/30} />
           <Box
             sx={{
               top: 0,
@@ -41,7 +53,7 @@ export default function TimedLoader(props) {
               variant="caption"
               component="div"
               color="text.secondary"
-            >{props.value}</Typography>
+            >{value}</Typography>
           </Box>
         </Box>
       </Backdrop>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Paper from "@mui/material/Paper";
 import Divider from "@mui/material/Divider";
 import Box from "@mui/material/Box";
@@ -15,6 +15,7 @@ import hard from '../images/hard.jpg'
 import { Button, CardActionArea, CardActions } from '@mui/material';
 
 export default function DifficultyCard(props) {
+
   const divStyle = {
     width: "100%",
     float: "left",
@@ -107,7 +108,9 @@ export default function DifficultyCard(props) {
               variant="contained"
               aria-label="outlined primary button group"
               onClick={() => {
-                props.handleDifficultyButton(props.difficulty);
+                const lowerCase = props.difficulty.toLowerCase()
+                console.log(lowerCase)
+                props.handleDifficultyButton(lowerCase);
               }}
               fullWidth
               disabled={!props.buttonsEnabled}

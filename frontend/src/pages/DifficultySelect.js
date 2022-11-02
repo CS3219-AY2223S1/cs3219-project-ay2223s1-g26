@@ -27,10 +27,10 @@ function DifficultySelect() {
   const [partnerUuid, setPartnerUuid] = useState();
   const [roomUuid, setRoomUuid] = useState();
   const [questionSeed, setQuestionSeed] = useState(null);
-  const [value, setValue] = useState(0)
+  
 
   const { user } = useContext(context);
-  console.log("user gotten from context: ", user?.displayName);
+  // console.log("user gotten from context: ", user?.displayName);
 
   useEffect(() => {
     msSocket = io("http://localhost:3000");
@@ -92,16 +92,8 @@ function DifficultySelect() {
         setDifficulty(null);
         setButtonsEnabled(true);
       }, 30000);
-      const valueIncrementer = setInterval(() => {
-        setValue((prev) => prev >= 30 ? 0 : prev + 1)
-      }, 1000)
       //Disable the buttons
       setButtonsEnabled(false);
-      console.log('value:', value, 'isConnecting', isConnecting)
-      return () => {
-        clearInterval(valueIncrementer)
-        setValue(0)
-      }
     } else if (isConnecting == false) {
       //Stop loading spinner
       //Enable the buttons
@@ -150,7 +142,7 @@ function DifficultySelect() {
   return (
     <div>
       {isConnecting
-        ? (<TimedLoader loading={isConnecting} value={value} difficulty={difficulty}/>)
+        ? (<TimedLoader loading={isConnecting} difficulty={difficulty}/>)
         : (<>
             {user && <div style={{
                 fontSize:30,
