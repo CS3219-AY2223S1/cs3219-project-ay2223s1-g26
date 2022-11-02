@@ -35,7 +35,10 @@ function DifficultySelect() {
 
   useEffect(() => {
     msSocket = io(
-      "matching-network-load-balancer-dae844dd94888ac6.elb.ap-southeast-1.amazonaws.com"
+      "matching-network-load-balancer-dae844dd94888ac6.elb.ap-southeast-1.amazonaws.com",
+      {
+        withCredentials: true,
+      }
     );
 
     msSocket.on("connected", () => {
