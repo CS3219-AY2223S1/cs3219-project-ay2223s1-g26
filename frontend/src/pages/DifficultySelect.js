@@ -12,6 +12,7 @@ import { io } from "socket.io-client";
 import { useNavigate } from "react-router-dom";
 import { context } from "../context";
 import DifficultyCard from "../components/DifficultyCard";
+import TimedLoader from "../components/TimedLoader";
 
 const Difficulties = ['Easy', 'Medium', 'Hard']
 
@@ -26,6 +27,7 @@ function DifficultySelect() {
   const [partnerUuid, setPartnerUuid] = useState();
   const [roomUuid, setRoomUuid] = useState();
   const [questionSeed, setQuestionSeed] = useState(null);
+  const [value, setValue] = useState(0)
 
   const { user } = useContext(context);
   console.log("user gotten from context: ", user?.displayName);
@@ -90,18 +92,22 @@ function DifficultySelect() {
         setDifficulty(null);
         setButtonsEnabled(true);
       }, 30000);
+      const valueIncrementer = setInterval(() => {
+        setValue((prev) => prev >= 30 ? 0 : prev + 1)
+      }, 1000)
       //Disable the buttons
       setButtonsEnabled(false);
-      document.getElementById("circularProgress").style.display = "block";
+      console.log('value:', value, 'isConnecting', isConnecting)
+      return () => {
+        clearInterval(valueIncrementer)
+        setValue(0)
+        console.log('value set as 0')
+      }
     } else if (isConnecting == false) {
       //Stop loading spinner
       //Enable the buttons
       msSocket.emit("deregister", user.uid);
-      document.getElementById("circularProgress").style.display = "none";
       setButtonsEnabled(true);
-    } else {
-      document.getElementById("circularProgress").style.display = "none";
-      return;
     }
   }, [isConnecting]);
 
@@ -144,49 +150,41 @@ function DifficultySelect() {
 
   return (
     <div>
-      {user && <div style={{
-          fontSize:30,
-          fontWeight:400,
-          marginTop: -30,
-          justifyContent: 'center',
-          alignItems: 'center'
-        }}>
-          What difficulty would you like to attempt <span style={{color: '#1b76d2'}}>{user.displayName}</span> ?
-        </div>
+      {isConnecting
+        ? (<TimedLoader loading={isConnecting} value={value} difficulty={difficulty}/>)
+        : (<>
+            {user && <div style={{
+                fontSize:30,
+                fontWeight:400,
+                marginTop: -30,
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}>
+                What difficulty would you like to attempt <span style={{color: '#1b76d2'}}>{user.displayName}</span> ?
+              </div>
+            }
+            <Grid container spacing={1} style={{marginTop: 25}}>
+              {Difficulties.map((difficulty, i) => (
+                <Grid item xs={4}>
+                  <DifficultyCard
+                    difficulty={difficulty}
+                    handleDifficultyButton={handleDifficultyButton}
+                    buttonsEnabled={buttonsEnabled}/>
+                </Grid>
+              ))}
+            </Grid>
+            <Snackbar
+              open={timeoutSnackbarOpen}
+              autoHideDuration={6000}
+              onClose={handleClose}
+              anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+            >
+              <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
+                No match could be found! Returning to difficulty select.
+              </Alert>
+            </Snackbar>
+        </>)
       }
-      <Grid container spacing={1} style={{marginTop: 25}}>
-        {Difficulties.map((difficulty, i) => (
-          <Grid item xs={4}>
-            <DifficultyCard
-              difficulty={difficulty}
-              handleDifficultyButton={handleDifficultyButton}
-              buttonsEnabled={buttonsEnabled}/>
-          </Grid>
-        ))}
-      </Grid>
-      <Grid
-        container
-        spacing={8}
-        direction="column"
-        justifyContent="center"
-        alignItems="center"
-      >
-        <Grid item>
-          <div id="circularProgress" display="none">
-            <CircularProgress />
-          </div>
-        </Grid>
-      </Grid>
-      <Snackbar
-        open={timeoutSnackbarOpen}
-        autoHideDuration={6000}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-      >
-        <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
-          No match could be found! Returning to difficulty select.
-        </Alert>
-      </Snackbar>
     </div>
   );
 }
