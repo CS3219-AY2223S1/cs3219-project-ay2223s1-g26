@@ -15,7 +15,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "./firebase";
 import axios from "axios";
 import Loader from "./components/Loader";
-import DifficultySelect from "./components/DifficultySelect";
+import DifficultySelect from "./pages/DifficultySelect";
 import Practice from "./pages/Practice";
 
 function App() {
