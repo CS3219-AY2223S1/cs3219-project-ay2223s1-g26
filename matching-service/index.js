@@ -70,26 +70,9 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public/index.html"));
 });
 
-app.get("/testInsertQuery", async (req, res) => {
-  const waitee = await insertWaitingQuery("uuid2", "hard");
-  if (waitee != null) {
-    res.send(JSON.stringify(waitee, null, 2));
-  } else {
-    res.send("");
-  }
-});
-
-app.get("/testReadQuery", async (req, res) => {
-  const waitee = await readWaitingQuery("hard");
-  res.send(JSON.stringify(waitee, null, 2));
-});
-
-app.get("/getMatch", async (req, res) => {
-  const partner = await getMatchQuery("uuid4", "hard");
-  res.send(JSON.stringify(partner, null, 2));
-});
-
 //Start listening on port 3000
 httpServer.listen(3000, () => {
   console.log("listening on *:3000");
 });
+
+export default app;
