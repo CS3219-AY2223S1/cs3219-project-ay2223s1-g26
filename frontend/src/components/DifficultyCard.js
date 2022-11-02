@@ -30,7 +30,7 @@ export default function DifficultyCard(props) {
   const textMapping = {
     Easy: 'Perfect for beginners who are just starting out!',
     Medium: 'For those who have had some practice',
-    Hard: 'Try me if you are an expert looking for challenge'
+    Hard: 'Warning: For experts looking for a challenge'
   }
 
   const estimatedTimeMapping = {

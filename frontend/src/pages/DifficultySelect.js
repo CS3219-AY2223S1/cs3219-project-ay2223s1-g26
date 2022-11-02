@@ -101,7 +101,6 @@ function DifficultySelect() {
       return () => {
         clearInterval(valueIncrementer)
         setValue(0)
-        console.log('value set as 0')
       }
     } else if (isConnecting == false) {
       //Stop loading spinner
