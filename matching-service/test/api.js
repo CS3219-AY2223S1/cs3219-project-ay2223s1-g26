@@ -16,7 +16,7 @@ app.post(`/waiting/:uuid/:difficulty`, async (req, res) => {
     let uuid = req.params.uuid;
     let difficulty = req.params.difficulty;
     if (uuid == null || difficulty == null) {
-      res.send(404);
+      res.send(400);
       return;
     }
     const waitee = await insertWaitingQuery(uuid, difficulty);
@@ -33,7 +33,7 @@ app.post(`/waiting/:uuid/:difficulty`, async (req, res) => {
   app.get(`/waiting/:difficulty`, async (req, res) => {
     let difficulty = req.params.difficulty;
     if (difficulty == null) {
-      res.send(404);
+      res.send(400);
       return;
     }
     const waitingUsers = await readWaitingQuery(difficulty);
@@ -50,7 +50,7 @@ app.post(`/waiting/:uuid/:difficulty`, async (req, res) => {
   app.delete(`/waiting/:uuid`, async (req,res) => {
     var uuid = req.params.uuid;
     if (uuid == null) {
-      res.send(404);
+      res.send(400);
       return;
     }
     const waitee = await deleteWaitingQuery(uuid);
