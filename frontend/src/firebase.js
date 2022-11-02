@@ -9,7 +9,7 @@ import {
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: process.env.FIREBASE_API_KEY,
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
   authDomain: "peerprep-userser.firebaseapp.com",
   projectId: "peerprep-userser",
   storageBucket: "peerprep-userser.appspot.com",
