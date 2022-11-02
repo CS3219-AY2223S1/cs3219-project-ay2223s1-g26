@@ -34,12 +34,9 @@ function DifficultySelect() {
   console.log("user gotten from context: ", user?.user?.uid);
 
   useEffect(() => {
-    msSocket = io(
-      "matching-network-load-balancer-dae844dd94888ac6.elb.ap-southeast-1.amazonaws.com",
-      {
-        withCredentials: true,
-      }
-    );
+    msSocket = io("/api/", {
+      withCredentials: true,
+    });
 
     msSocket.on("connected", () => {
       console.log("connected to match service!");
