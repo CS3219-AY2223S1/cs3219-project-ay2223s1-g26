@@ -13,7 +13,8 @@ describe('Invalid body', () => {
       chai.request(api)
         .post('/fdsafad')
         .end((err, res) => {
-          assert.equal(res.status, 200)
+          console.log(res)
+          assert.equal(res.status, 800)
           console.log(res.body)
           done()
         })
