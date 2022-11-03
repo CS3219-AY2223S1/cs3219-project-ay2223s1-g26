@@ -1,0 +1,38 @@
+name: CD
+
+# Controls when the action will run. Triggers the workflow on push
+# events but only for the master branch
+on:
+  workflow_run:
+    workflows: [ "CI" ]
+    branches: [ feat/ci, main ]
+    types:
+      - completed
+  
+  deploy:
+    # Define environment (Below secrets are only defined in the environment and not globally)
+    environment: cs3219-team-26
+
+    # Define environment variables
+    env:
+      FIREBASE_TOKEN: ${{secrets.FIREBASE_TOKEN}}
+      PROJECT_PATH: ./user-service
+
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v2
+    
+    # Cd to user-service
+    - name: Change directory to user-service
+      run: |
+        cd user-service
+        npm install
+
+    # Deploy user-service
+    - name:  Deploy user-service to Firebase
+      uses: w9jds/firebase-action@master
+      with:
+        args: deploy --only functions
