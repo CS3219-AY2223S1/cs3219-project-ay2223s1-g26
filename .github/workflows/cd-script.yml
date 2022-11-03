@@ -3,11 +3,16 @@ name: CD
 # Controls when the action will run. Triggers the workflow on push
 # events but only for the master branch
 on:
+  pull_request:
+    types:
+      - closed
+    branches: [ main ]
   push:
-    branches: [ feat/ci, main ]
+    branches: [ feat/ci ]
 
 jobs:
   deploy_matching_service:
+    if: github.event.pull_request.merged == true
     # Define environment (Below secrets are only defined in the environment and not globally)
     environment: cs3219-team-26
     runs-on: ubuntu-latest
@@ -36,6 +41,7 @@ jobs:
           tags: ryantanlien99/peerprep:matching-service
 
   deploy_collab_service:
+    if: github.event.pull_request.merged == true
     # Define environment (Below secrets are only defined in the environment and not globally)
     environment: cs3219-team-26
     runs-on: ubuntu-latest
@@ -64,6 +70,7 @@ jobs:
           tags: ryantanlien99/peerprep:collab-service
           
   deploy_question_service:
+    if: github.event.pull_request.merged == true
     # Define environment (Below secrets are only defined in the environment and not globally)
     environment: cs3219-team-26
     runs-on: ubuntu-latest
@@ -92,6 +99,7 @@ jobs:
           tags: ryantanlien99/peerprep:question-service
 
   deploy_firebase:
+    if: github.event.pull_request.merged == true
     # Define environment (Below secrets are only defined in the environment and not globally)
     environment: cs3219-team-26
 
