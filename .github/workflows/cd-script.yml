@@ -6,9 +6,7 @@ on:
   pull_request:
     types:
       - closed
-    branches: [ main ]
-  push:
-    branches: [ feat/ci ]
+    branches: [ main, feat/ci ]
 
 jobs:
   deploy_matching_service:
