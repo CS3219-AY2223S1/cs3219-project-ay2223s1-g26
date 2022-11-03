@@ -61,6 +61,7 @@ jobs:
         with:
           context: ./collab-service
           push: true
+          tags: ryantanlien99/peerprep:collab-service
           
   deploy_question_service:
     # Define environment (Below secrets are only defined in the environment and not globally)
