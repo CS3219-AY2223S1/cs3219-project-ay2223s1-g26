@@ -15,10 +15,6 @@ jobs:
     steps:
       - name: Check out the repo
         uses: actions/checkout@v3
-      
-      - name: Change directory to matching-service
-        run: |
-          cd matching-service
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
@@ -35,7 +31,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
         with:
-          context: .
+          context: ./matching-service
           push: true
           tags: ryantanlien99/peerprep:matching-service
 
