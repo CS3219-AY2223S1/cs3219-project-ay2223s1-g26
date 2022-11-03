@@ -1,0 +1,43 @@
+name: CI
+
+# Controls when the action will run. Triggers the workflow on push
+# events but only for the master branch
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ feat/ci ]
+
+jobs:
+  build:
+  
+    # Define environment (Below secrets are only defined in the environment and not globally)
+    environment: cs3219-team-26
+
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v2
+
+    # Run npm install and npm test on matching-service
+    - name: Build and test matching-service
+      run: |
+        cd matching-service
+        pwd
+        touch .env
+        echo 'AWS_DB=${{secrets.AWS_DB}}' >> .env
+        echo 'AWS_DB_USER=${{secrets.AWS_DB_USER}}' >> .env
+        echo 'AWS_DB_PASSWORD=${{secrets.AWS_DB_PASSWORD}}' >> .env
+        echo 'AWS_DB_ENDPOINT=${{secrets.AWS_DB_ENDPOINT}}' >> .env
+        echo 'AWS_DB_PORT=${{secrets.AWS_DB_PORT}}' >> .env
+        echo 'AWS_SOCKET_DB=${{secrets.AWS_SOCKET_DB}}' >> .env
+        echo 'AWS_SOCKET_DB_USER=${{secrets.AWS_SOCKET_DB_USER}}' >> .env
+        echo 'AWS_SOCKET_DB_PASSWORD=${{secrets.AWS_SOCKET_DB_PASSWORD}}' >> .env
+        echo 'AWS_SOCKET_DB_ENDPOINT=${{secrets.AWS_SOCKET_DB_ENDPOINT}}' >> .env
+        echo 'AWS_SOCKET_DB_PORT=${{secrets.AWS_SOCKET_DB_PORT}}' >> .env
+        cat .env
+        npm install
+        npm test
+        cd ..

@@ -1,9 +1,4 @@
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import * as React from "react";
 import LoginPage from "./pages/LoginPage";
 import Error from "./pages/Error";
@@ -21,10 +16,7 @@ import Practice from "./pages/Practice";
 function App() {
   const [user, loading, error] = useAuthState(auth);
   const [isLoading, setIsLoading] = React.useState(false);
-  const api =
-    process.env.NODE_ENV == "development"
-      ? "http://localhost:5000/api"
-      : "https://us-central1-peerprep-userser.cloudfunctions.net/api";
+  const api = "https://us-central1-peerprep-userser.cloudfunctions.net/api";
   const defaultOptions = {
     baseURL: api,
     headers: {
@@ -74,7 +66,10 @@ function App() {
                   {user ? (
                     <Routes>
                       <Route path="/dashboard" element={<Dashboard />} />
-                      <Route path="/difficultySelect" element={<DifficultySelect />} />
+                      <Route
+                        path="/difficultySelect"
+                        element={<DifficultySelect />}
+                      />
                       <Route path="/practice" element={<Practice />} />
                       <Route
                         path="/"

@@ -4,6 +4,8 @@ services:
     ports:
     - "3000:3000"
     build: ./matching-service
+    profiles:
+      - local
   collab-service:
     depends_on:
       - matching-service
@@ -11,8 +13,14 @@ services:
     ports: 
     - "8081:8081"
     build: ./collab-service
+    profiles:
+      - deploy
+      - local
   question-service:
     image: peerprep/question-service:test
     ports:
     - "3005:3005"
     build: ./question-service
+    profiles:
+      - deploy
+      - local

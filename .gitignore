@@ -8,3 +8,6 @@ frontend/.env.json
 frontend/src/.env.json
 .env
 
+
+# Local Netlify folder
+.netlify

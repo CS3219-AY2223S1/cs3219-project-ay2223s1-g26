@@ -33,7 +33,9 @@ function DifficultySelect() {
   // console.log("user gotten from context: ", user?.displayName);
 
   useEffect(() => {
-    msSocket = io("http://localhost:3000");
+    msSocket = io(
+      "matching-network-load-balancer-dae844dd94888ac6.elb.ap-southeast-1.amazonaws.com"
+    );
 
     msSocket.on("connected", () => {
       console.log("connected to match service!");
@@ -57,14 +59,14 @@ function DifficultySelect() {
     });
 
     msSocket.on("deregister_failed", (numberOfRetries) => {
-      if (numberOfRetries == 3) {
+      if (numberOfRetries === 3) {
         return;
       } else {
-        console.log("deregister_failed retry called")
+        console.log("deregister_failed retry called");
         msSocket.emit("deregister", user.uid, numberOfRetries + 1);
       }
     });
-  }, []);
+  }, [user.user.uid]);
 
   useEffect(() => {
     if (isMatched) {
@@ -85,7 +87,7 @@ function DifficultySelect() {
   //Connecting hook
   useEffect(() => {
     console.log("isConnecting: " + isConnecting);
-    if (isConnecting == true) {
+    if (isConnecting === true) {
       timer = setTimeout(() => {
         setIsConnecting(false);
         toggleTimeoutSnackBar();

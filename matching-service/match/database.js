@@ -15,7 +15,7 @@ const port = process.env.AWS_DB_PORT;
 console.log(user);
 const sequelize = connectPostgres();
 
-export class Waiting extends Model {
+export class Sockets extends Model {
 }
 
 function connectPostgres() {
@@ -26,6 +26,98 @@ function connectPostgres() {
         logging: false
     })
     return sequelize;
+}
+
+function initSocketsModel(sequelize) {
+    Sockets.init({
+        id: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            primaryKey: true
+        },
+        uuid: {
+            type: DataTypes.STRING,
+            allowNull: false
+        }
+    }, {
+        sequelize,
+        modelName: 'sockets',
+        freezeTableName: true,
+        timestamps: false
+    })
+}
+
+export async function readSocketsQuery() {
+    initSocketsModel(sequelize);
+    const sockets = await Sockets.findAll();
+    return sockets; 
+}
+
+export async function readSocketsByUuidQuery(uuidField) {
+    initSocketsModel(sequelize);
+    const socket = await Sockets.findOne({ 
+        where: {
+            uuid: uuidField
+        }
+    });
+    return socket;
+}
+
+export async function insertSocketsQuery(socketId, uuidField) {
+    initSocketsModel(sequelize);
+    const socket = await Sockets.findOne({ 
+        where: {
+            uuid: uuidField
+        }
+    })
+    if (socket == null) {
+        try {
+            const socket = await Sockets.create({id: socketId, uuid: uuidField});
+            return socket;
+        } catch (SequelizeUniqueConstraintError) {
+            return null;
+        }
+    } else {
+        try {
+            await Sockets.update(
+                { id: socketId, uuid: uuidField}, 
+                { where: 
+                    {
+                        id: socket.id
+                    }
+                });
+            const updatedSocket = await Sockets.readSocketsByUuidQuery(uuidField);
+            return updatedSocket;
+        } catch (SequelizeUniqueConstraintError) {
+            return null;
+        }
+    }
+}
+
+export async function deleteSocketsQuery(socketId) {
+    initSocketsModel(sequelize);
+    const socket = await Sockets.findByPk(socketId);
+    if (socket == null) {
+        return null;
+    }
+    await socket.destroy({
+        where: {
+            id: socketId
+        }
+    })
+    return socket;
+}
+
+export async function deleteSocketsByUuidQuery(uuidField) {
+    initSocketsModel(sequelize);
+    await Sockets.destroy({
+        where: {
+            uuid: uuidField
+        }
+    });
+}
+
+export class Waiting extends Model {
 }
 
 function initWaitingModel(sequelize) {
