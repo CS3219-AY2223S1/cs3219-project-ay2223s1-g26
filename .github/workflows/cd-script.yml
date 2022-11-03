@@ -8,7 +8,8 @@ on:
     branches: [ feat/ci, main ]
     types:
       - completed
-  
+
+jobs:
   deploy:
     # Define environment (Below secrets are only defined in the environment and not globally)
     environment: cs3219-team-26
