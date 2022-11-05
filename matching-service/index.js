@@ -110,7 +110,7 @@ var clientDir = path.join(__dirname, "public");
 app.use("/", express.static(clientDir));
 
 //Send static HTML file
-app.get("/", (req, res) => {s
+app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public/index.html"));
 });
 

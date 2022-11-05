@@ -41,3 +41,13 @@ jobs:
         npm install
         npm test
         cd ..
+
+    # Run npm install and npm test on user-service
+    - name: Build and test user-service
+      run: |
+        cd user-service
+        pwd
+        npm install
+        npm run firebase
+        npm test
+        cd ..
