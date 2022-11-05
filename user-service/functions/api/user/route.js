@@ -140,7 +140,6 @@ module.exports = {
     }
   },
   async post(req, res, admin) {
-    console.log(req.params.route)
     const user = await auth.getUser(req, res)
     const uid = user.uid
     if (!uid) {
