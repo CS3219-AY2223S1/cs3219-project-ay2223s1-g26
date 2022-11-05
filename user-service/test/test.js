@@ -12,6 +12,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 const rawData = fs.readFileSync('ServiceAccountKey.json')
+console.log(JSON.stringify(rawData))
 const contents = JSON.parse(rawData)
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,
