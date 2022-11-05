@@ -73,11 +73,13 @@ jobs:
         npm install
         # npm run firebase
         npm test
-        cd ..
     - name: Setup firebase emulator
       uses: w9jds/firebase-action@master
       with:
         args: emulators:start && npm test"
       env:
         FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+    - name: Clean up
+      run: |
+        cd ..
       
