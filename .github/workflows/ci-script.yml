@@ -44,7 +44,9 @@ jobs:
         npm install
         npm test
         cd ..
-
+    - name: Change directory to user-service
+      run: |
+        cd user-service
     # Run npm install and npm test on user-service
     - name: create ServiceAccountKey.json
       uses: schdck/create-env-json@v1
@@ -61,22 +63,21 @@ jobs:
         auth_provider_x509_cert_url: 'https://www.googleapis.com/oauth2/v1/certs'
         client_x509_cert_url: 'https://www.googleapis.com/robot/v1/metadata/x509/peerprep-userser%40appspot.gserviceaccount.com'
     
-    - name: Setup firebase emulator
-      uses: w9jds/firebase-action@master
-      with:
-        args: emulators:exec --only firestore"
-      env:
-        FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
     - name: Build and test user-service
       run: |
-        cd user-service
         touch .env
         echo 'FIREBASE_API_KEY=${{secrets.FIREBASE_API_KEY}}' >> .env
         cat ServiceAccountKey.json
         cat .env
         pwd
         npm install
-        npm run firebase
+        # npm run firebase
         npm test
         cd ..
+    - name: Setup firebase emulator
+      uses: w9jds/firebase-action@master
+      with:
+        args: emulators:start && npm test"
+      env:
+        FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
       
