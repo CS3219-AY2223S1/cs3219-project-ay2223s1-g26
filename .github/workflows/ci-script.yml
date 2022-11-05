@@ -68,11 +68,12 @@ jobs:
         touch .env
         echo 'FIREBASE_API_KEY=${{secrets.FIREBASE_API_KEY}}' >> .env
         cat ServiceAccountKey.json
+        npm install
         cat .env
         pwd
-        npm install
+        ls -a
         # npm run firebase
-        npm test
+        # npm test
     - name: Setup firebase emulator
       uses: w9jds/firebase-action@master
       with:
