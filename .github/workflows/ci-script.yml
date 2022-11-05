@@ -20,6 +20,9 @@ jobs:
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
+    - uses: actions/setup-node@v1
+      with:
+        node-version: '12'
 
     # Run npm install and npm test on matching-service
     - name: Build and test matching-service
@@ -57,6 +60,13 @@ jobs:
         client_id: ${{ secrets.CLIENT_ID }}
         auth_provider_x509_cert_url: 'https://www.googleapis.com/oauth2/v1/certs'
         client_x509_cert_url: 'https://www.googleapis.com/robot/v1/metadata/x509/peerprep-userser%40appspot.gserviceaccount.com'
+    
+    - name: Setup firebase emulator
+      uses: w9jds/firebase-action@master
+      with:
+        args: emulators:exec --only firestore"
+      env:
+        FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
     - name: Build and test user-service
       run: |
         cd user-service
