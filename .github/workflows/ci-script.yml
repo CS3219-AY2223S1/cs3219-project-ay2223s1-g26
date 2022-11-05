@@ -43,9 +43,9 @@ jobs:
         cd ..
 
     # Run npm install and npm test on user-service
-    - uses: schdck/create-env-json@v1
-    - id: create-env
-    - with:
+    - name: create ServiceAccountKey.json
+      uses: schdck/create-env-json@v1
+      with:
         file-name: 'ServiceAccountKey.json'
         type: 'service-account'
         project_id: 'peerprep-userser'
@@ -54,7 +54,7 @@ jobs:
         client_email: 'peerprep-userser@appspot.gserviceaccount.com'
         auth_uri": 'https://accounts.google.com/o/oauth2/auth'
         token_uri: 'https://oauth2.googleapis.com/token'
-        client_id: '100104637785648221818'
+        client_id: ${{ secrets.CLIENT_ID }}
         auth_provider_x509_cert_url: 'https://www.googleapis.com/oauth2/v1/certs'
         client_x509_cert_url: 'https://www.googleapis.com/robot/v1/metadata/x509/peerprep-userser%40appspot.gserviceaccount.com'
     - name: Build and test user-service
