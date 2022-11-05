@@ -44,22 +44,11 @@ jobs:
         npm install
         npm test
         cd ..
-    # - name: Change directory to user-service
-    #   run: |
-    #     cd user-service
-    # Run npm install and npm test on user-service
-    # - name: create ServiceAccountKey.json
-    #   id: create-json
-    #   uses: jsdaniell/create-json@v1.2.1
-    #   with:
-    #     name: 'ServiceAccountKey.json'
-    #     json: ${{ secrets.SERVICE_ACCOUNT_KEY }}
-    #     dir: './user-service'
-    #     file-name: 'ServiceAccountKey.json'
     
     - name: Build and test user-service
       run: |
         cd user-service
+        pwd
         touch .env
         echo 'FIREBASE_API_KEY=${{secrets.FIREBASE_API_KEY}}' >> .env
         echo 'PRIVATE_ID_KEY=${{secrets.PRIVATE_ID_KEY}}' >> .env
@@ -67,6 +56,7 @@ jobs:
         echo 'CLIENT_ID=${{secrets.CLIENT_ID}}' >> .env
         npm install
         cat .env
+        npm install
     - name: Setup firebase emulator
       uses: w9jds/firebase-action@master
       with:
