@@ -12,6 +12,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 const {private_key} = JSON.parse(process.env.PRIVATE_KEY);
+console.log(!!private_key)
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,
   credential: admin.credential.cert({

@@ -50,10 +50,15 @@ jobs:
         cd user-service
         pwd
         touch .env
+        echo 'start'
         echo 'FIREBASE_API_KEY=${{secrets.FIREBASE_API_KEY}}' >> .env
+        echo 'start1'
         echo 'PRIVATE_ID_KEY=${{secrets.PRIVATE_ID_KEY}}' >> .env
+        echo 'start2'
         echo 'PRIVATE_KEY'=${{secrets.PRIVATE_KEY}}' >> .env
+        echo 'start3'
         echo 'CLIENT_ID=${{secrets.CLIENT_ID}}' >> .env
+        echo 'Done'
         npm install
         cat .env
         npm install
