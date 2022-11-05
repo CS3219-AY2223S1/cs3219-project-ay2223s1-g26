@@ -1,21 +1,19 @@
+import chai from 'chai'
 import {describe, it} from 'mocha'
 import chaiHttp from 'chai-http'
-import chai from 'chai'
+// import app from '../functions/api/index.js'
+const url = 'http://localhost:5001/peerprep-userser/us-central1/api'
 
-const api = "https://us-central1-peerprep-userser.cloudfunctions.net/api";
 chai.use(chaiHttp)
-var assert = chai.asset
+var assert = chai.assert
 
-// Get tests
-describe('Invalid body', () => {
-  describe('#test()', () => {
-    it('should return status 200', async () => {
-      chai.request(api)
-        .post('/fdsafad')
+describe('Test if server is running', () => {
+  describe('GET /api()', () => {
+    it('should return status 200', (done) => {
+      chai.request(url)
+        .get('/api')
         .end((err, res) => {
-          console.log(res)
-          assert.equal(res.status, 800)
-          console.log(res.body)
+          assert.equal(res.status, 200)
           done()
         })
     });

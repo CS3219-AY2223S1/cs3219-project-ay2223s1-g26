@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon index.js",
-    "start": "node index.js",
+    "start": "npm run firebase",
     "firebase": "firebase emulators:start",
     "test": "mocha --exit"
   },
