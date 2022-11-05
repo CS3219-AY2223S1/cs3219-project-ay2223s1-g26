@@ -60,7 +60,7 @@ jobs:
     - name: Setup firebase emulator
       uses: w9jds/firebase-action@master
       with:
-        args: emulators:exec --only firestore \"npm run test --exit\"
+        args: emulators:start \"npm run test --exit\"
       env:
         FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
         PROJECT_PATH: ./user-service

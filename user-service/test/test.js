@@ -74,9 +74,6 @@ describe('Test if server is running', () => {
         .get('/api')
         .end((err, res) => {
           assert.equal(res.status, 200)
-          if (err) {
-            console.error(err)
-          }
           done()
         })
     });
