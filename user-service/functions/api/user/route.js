@@ -106,6 +106,7 @@ async function getSavedCode(res, admin, uid, questionId) {
       return
     }
     const code = codeDoc.data().code
+    functions.logger.log('end of getSavedCode', code)
     res.status(200).send(code)
   } catch (e) {
     functions.logger.error(e)
@@ -146,6 +147,7 @@ module.exports = {
       return
     }
     if (req.params.route === 'addQuestionAttempt') {
+      console.log(req.body)
       if (req.body.questionId, req.body.questionDifficulty, req.body.questionTitle) {
         await addQuestionAttempt(res, admin, uid, req.body.questionId, req.body.questionDifficulty, req.body.questionTitle)
         return

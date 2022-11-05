@@ -4,7 +4,6 @@ const functions = require('firebase-functions')
 async function decode(authHeader) {
   if (authHeader) {
     const tokenId = authHeader.replace('Bearer ', '').trim()
-    console.log(tokenId)
     if (tokenId) {
       try {
         const decodedToken = await admin.auth().verifyIdToken(tokenId)
