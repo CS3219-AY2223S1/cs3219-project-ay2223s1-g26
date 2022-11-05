@@ -12,7 +12,6 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 const rawData = fs.readFileSync('ServiceAccountKey.json')
-console.log('rawData', rawData)
 const contents = JSON.parse(rawData)
 // Create test user for firebase testing of authenticated routes
 const firebaseConfig = {
