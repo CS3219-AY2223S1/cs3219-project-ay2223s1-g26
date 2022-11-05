@@ -80,13 +80,13 @@ export async function insertSocketsQuery(socketId, uuidField) {
     } else {
         try {
             await Sockets.update(
-                { id: socketId, uuid: uuidField}, 
+                { id: socketId, uuid: uuidField }, 
                 { where: 
                     {
                         id: socket.id
                     }
                 });
-            const updatedSocket = await Sockets.readSocketsByUuidQuery(uuidField);
+            const updatedSocket = await readSocketsByUuidQuery(uuidField);
             return updatedSocket;
         } catch (SequelizeUniqueConstraintError) {
             return null;

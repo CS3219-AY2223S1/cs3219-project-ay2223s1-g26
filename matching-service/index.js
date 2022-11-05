@@ -6,13 +6,10 @@ import * as path from "path";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 import {
-  readSocketsQuery,
   insertSocketsQuery,
   deleteSocketsQuery,
   readSocketsByUuidQuery,
-  insertWaitingQuery,
   getMatchQuery,
-  readWaitingQuery,
   deleteWaitingQuery,
   deleteSocketsByUuidQuery,
 } from "./match/database.js";
