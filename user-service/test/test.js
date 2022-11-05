@@ -11,26 +11,22 @@ if (process.env.NODE_ENV !== 'production') {
   config();
 }
 
-try {
-  const rawData = fs.readFileSync('ServiceAccountKey.json')
-  const contents = JSON.parse(rawData)
-  const firebaseConfig = {
-    apiKey: process.env.FIREBASE_API_KEY,
-    credential: admin.credential.cert(contents),
-    authDomain: "peerprep-userser.firebaseapp.com",
-    projectId: "peerprep-userser",
-    storageBucket: "peerprep-userser.appspot.com",
-    messagingSenderId: "1017360607564",
-    appId: "1:1017360607564:web:8c39c6b7831774746a87e9",
-    measurementId: "G-PHPR5YLWSH",
-  };
-  admin.initializeApp(firebaseConfig)
-} catch (e) {
-  console.log(e)
-}
+const rawData = fs.readFileSync('ServiceAccountKey.json')
+const contents = JSON.parse(rawData)
+const firebaseConfig = {
+  apiKey: process.env.FIREBASE_API_KEY,
+  credential: admin.credential.cert(contents),
+  authDomain: "peerprep-userser.firebaseapp.com",
+  projectId: "peerprep-userser",
+  storageBucket: "peerprep-userser.appspot.com",
+  messagingSenderId: "1017360607564",
+  appId: "1:1017360607564:web:8c39c6b7831774746a87e9",
+  measurementId: "G-PHPR5YLWSH",
+};
+admin.initializeApp(firebaseConfig)
+console.log(e)
+
 // Create test user for firebase testing of authenticated routes
-
-
 const uid = 'test-uid';
 const developerClaims = {
   email:'test-email@email.com',
