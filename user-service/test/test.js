@@ -11,12 +11,21 @@ if (process.env.NODE_ENV !== 'production') {
   config();
 }
 
-const rawData = fs.readFileSync('ServiceAccountKey.json')
-console.log(JSON.stringify(rawData))
-const contents = JSON.parse(rawData)
+const {private_key} = JSON.parse(process.env.PRIVATE_KEY);
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,
-  credential: admin.credential.cert(contents),
+  credential: admin.credential.cert({
+    "type": "service_account",
+    "project_id": "peerprep-userser",
+    "private_key_id": process.env.PRIVATE_ID_KEY,
+    "private_key": private_key,
+    "client_email": "peerprep-userser@appspot.gserviceaccount.com",
+    "client_id": process.env.CLIENT_ID,
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/peerprep-userser%40appspot.gserviceaccount.com"
+  }),
   authDomain: "peerprep-userser.firebaseapp.com",
   projectId: "peerprep-userser",
   storageBucket: "peerprep-userser.appspot.com",
@@ -25,7 +34,6 @@ const firebaseConfig = {
   measurementId: "G-PHPR5YLWSH",
 };
 admin.initializeApp(firebaseConfig)
-console.log(e)
 
 // Create test user for firebase testing of authenticated routes
 const uid = 'test-uid';
