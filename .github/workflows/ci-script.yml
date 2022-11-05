@@ -44,27 +44,32 @@ jobs:
         npm install
         npm test
         cd ..
-    - name: Change directory to user-service
-      run: |
-        cd user-service
+    # - name: Change directory to user-service
+    #   run: |
+    #     cd user-service
     # Run npm install and npm test on user-service
     - name: create ServiceAccountKey.json
-      uses: schdck/create-env-json@v1
+      id: create-json
+      uses: jsdaniell/create-json@v1.2.1
       with:
+        name: 'ServiceAccountKey.json'
+        json: '{
+          "type": "service_account",
+          "project_id": "peerprep-userser",
+          "private_key_id": ${{ secrets.PRIVATE_KEY_ID }},
+          "private_key": ${{ secrets.PRIVATE_KEY }},
+          "client_email": "peerprep-userser@appspot.gserviceaccount.com",
+          "client_id": ${{ secrets.CLIENT_ID }},
+          "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+          "token_uri": "https://oauth2.googleapis.com/token",
+          "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+          "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/peerprep-userser%40appspot.gserviceaccount.com"}'
+        dir: 'src/user-service'
         file-name: 'ServiceAccountKey.json'
-        type: 'service-account'
-        project_id: 'peerprep-userser'
-        private_key_id:  ${{ secrets.PRIVATE_KEY_ID }}
-        private_key:  ${{ secrets.PRIVATE_KEY }}
-        client_email: 'peerprep-userser@appspot.gserviceaccount.com'
-        auth_uri": 'https://accounts.google.com/o/oauth2/auth'
-        token_uri: 'https://oauth2.googleapis.com/token'
-        client_id: ${{ secrets.CLIENT_ID }}
-        auth_provider_x509_cert_url: 'https://www.googleapis.com/oauth2/v1/certs'
-        client_x509_cert_url: 'https://www.googleapis.com/robot/v1/metadata/x509/peerprep-userser%40appspot.gserviceaccount.com'
     
     - name: Build and test user-service
       run: |
+        cd user-service
         touch .env
         echo 'FIREBASE_API_KEY=${{secrets.FIREBASE_API_KEY}}' >> .env
         cat ServiceAccountKey.json
@@ -72,15 +77,10 @@ jobs:
         cat .env
         pwd
         ls -a
-        # npm run firebase
-        # npm test
     - name: Setup firebase emulator
       uses: w9jds/firebase-action@master
       with:
         args: emulators:start && npm test"
       env:
         FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-    - name: Clean up
-      run: |
-        cd ..
       
