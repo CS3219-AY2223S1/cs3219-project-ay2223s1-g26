@@ -59,11 +59,4 @@ jobs:
         npm install -g firebase-tools
         # npm ci
         firebase emulators:exec --project peerprep-userser "npm test"
-    # - name: Start firebase emulator and run tests
-    #   uses: w9jds/firebase-action@master
-    #   with:
-    #     args: emulators:exec --project peerprep-userser "npm test"
-    #   env:
-    #     FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-    #     PROJECT_PATH: ./user-service
       
