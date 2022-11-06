@@ -67,6 +67,21 @@ console.log('Token', token)
 chai.use(chaiHttp)
 const assert = chai.assert
 
+const api = "https://us-central1-peerprep-userser.cloudfunctions.net/api";
+
+describe('Test if production server is running', () => {
+  describe('GET /api', () => {
+    it('should return status 200', (done) => {
+      chai.request(api)
+        .get('/api')
+        .end((err, res) => {
+          assert.equal(res.status, 200)
+          done()
+        })
+    });
+  });
+});
+
 describe('Test if server is running', () => {
   describe('GET /api', () => {
     it('should return status 200', (done) => {
