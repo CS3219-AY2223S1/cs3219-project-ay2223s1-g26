@@ -56,7 +56,7 @@ try {
       token,
       returnSecureToken: true
     })
-    console.log('res from identityToolKit', res)
+    // console.log('res from identityToolKit', res)
     token = res.data.idToken;
 } catch (e) {
   console.log('Failed to create token for testing', e)
