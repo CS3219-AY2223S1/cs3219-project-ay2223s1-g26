@@ -20,9 +20,6 @@ jobs:
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
-    - uses: actions/setup-node@v1
-      with:
-        node-version: '16.4'
 
     # Run npm install and npm test on matching-service
     - name: Build and test matching-service
@@ -61,7 +58,7 @@ jobs:
         cd ..
         npm install -g firebase-tools
         npm ci
-        firebase emulators:exec --only firestore \"npm run test --exit\"
+        firebase emulators:exec --only firestore "npm run test "
     # - name: Start firebase emulator and run tests
     #   uses: w9jds/firebase-action@master
     #   with:
