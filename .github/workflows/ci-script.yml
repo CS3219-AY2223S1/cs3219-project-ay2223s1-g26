@@ -62,8 +62,11 @@ jobs:
     - name: Start firebase emulator and run tests
       uses: w9jds/firebase-action@master
       with:
-        args: emulators:exec --only firestore \"echo 'run test script now' && npm run test\"
+        args: emulators:exec --only firestore \"npm run test\"
       env:
         FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
         PROJECT_PATH: ./user-service
+    - name: Print firebase debug log
+      run: |
+        cat firestore-debug.log
       
