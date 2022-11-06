@@ -6,7 +6,6 @@ user-service/ui-debug.log
 user-service/.env.json
 frontend/.env.json
 frontend/src/.env.json
-user-service/serviceAccount.json
 .env
 
 
