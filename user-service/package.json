@@ -8,7 +8,7 @@
     "dev": "nodemon index.js",
     "start": "npm run firebase",
     "firebase": "firebase emulators:start",
-    "test": " mocha --exit"
+    "test": " mocha --timeout 10000 --exit"
   },
   "keywords": [],
   "author": "",
