@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [ main ]
   push:
-    branches: [ feat/ci ]
+    branches: [ feat/ci , firebase-testing ]
 
 jobs:
   build:
@@ -41,3 +41,22 @@ jobs:
         npm install
         npm test
         cd ..
+    
+    - name: Build and test user-service
+      run: |
+        cd user-service
+        pwd
+        touch .env
+        echo 'FIREBASE_API_KEY=${{secrets.FIREBASE_API_KEY}}' >> .env
+        echo 'PRIVATE_ID_KEY=${{secrets.PRIVATE_ID_KEY}}' >> .env
+        echo 'CLIENT_ID=${{secrets.CLIENT_ID}}' >> .env
+        echo 'PRIVATE_KEY=${{secrets.PRIVATE_KEY}}' >> .env
+        npm install
+        cat .env
+        cd functions
+        npm install
+        cd ..
+        npm install -g firebase-tools
+        # npm ci
+        firebase emulators:exec --project peerprep-userser "npm test"
+      
