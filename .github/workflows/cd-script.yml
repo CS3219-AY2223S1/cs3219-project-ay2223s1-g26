@@ -12,7 +12,7 @@ on:
 
 jobs:
   deploy_matching_service:
-    # if: github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true
     # Define environment (Below secrets are only defined in the environment and not globally)
     environment: cs3219-team-26
     runs-on: ubuntu-latest
@@ -99,7 +99,7 @@ jobs:
           tags: ryantanlien99/peerprep:question-service
 
   deploy_firebase:
-    if: github.event.pull_request.merged == true
+    # if: github.event.pull_request.merged == true
     # Define environment (Below secrets are only defined in the environment and not globally)
     environment: cs3219-team-26
 
