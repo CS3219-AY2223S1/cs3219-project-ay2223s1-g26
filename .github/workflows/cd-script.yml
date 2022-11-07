@@ -119,6 +119,8 @@ jobs:
         cd functions
         npm install
         cd ..
+        pwd
+        ls -a
     # Deploying the functions to firebase
     - name:  Deploy user-service
       uses: w9jds/firebase-action@master
@@ -126,5 +128,8 @@ jobs:
         args: deploy --only functions
       # Define environment variables
       env:
+        PROJECT_PATH: ./user-service
         FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+
+
 
