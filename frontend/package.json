@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build && react-scripts start",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "lint": "npx eslint .",
     "devuser1": "cross-env PORT=4000 REACT_APP_ENV=dev_1 react-scripts start",

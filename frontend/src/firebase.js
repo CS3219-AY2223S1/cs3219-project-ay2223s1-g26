@@ -9,7 +9,7 @@ import {
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: process.env.FIREBASE_API_KEY,
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
   authDomain: "peerprep-userser.firebaseapp.com",
   projectId: "peerprep-userser",
   storageBucket: "peerprep-userser.appspot.com",
@@ -17,6 +17,8 @@ const firebaseConfig = {
   appId: "1:1017360607564:web:8c39c6b7831774746a87e9",
   measurementId: "G-PHPR5YLWSH",
 };
+
+console.log("apiKey: ", process.env.FIREBASE_API_KEY);
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
