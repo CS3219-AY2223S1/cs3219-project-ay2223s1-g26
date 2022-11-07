@@ -8,7 +8,7 @@ on:
       - closed
     branches: [ main ]
   push:
-    branches: [ feat/ci, fix/fix-firebase-cd ]
+    branches: [ feat/ci ]
 
 jobs:
   deploy_matching_service:
@@ -99,7 +99,7 @@ jobs:
           tags: ryantanlien99/peerprep:question-service
 
   deploy_firebase:
-    # if: github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true
     # Define environment (Below secrets are only defined in the environment and not globally)
     environment: cs3219-team-26
 
@@ -119,12 +119,13 @@ jobs:
     - name: Change directory to user-service
       run: |
         cd user-service
-        pwd
         npm install
 
-    # Deploy user-service
-    - name:  Deploy user-service to Firebase
+    # Deploying the functions to firebase
+    - name:  Deploy to user-service
       uses: w9jds/firebase-action@master
       with:
         args: deploy --only functions
+      env:
+        FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
 
