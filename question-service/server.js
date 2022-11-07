@@ -2,16 +2,11 @@ import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 
-import {
-  getAllQuestions,
-  getAllQuestionsByDifficulty,
-  getQuestionByID,
-  getRandomQuestionByDifficulty,
-} from "./questionController.js";
+import { getAQuestion } from "./questionController.js";
 
 dotenv.config({ path: "./.env" });
 
-const DB = process.env.DATABASE_URL;
+const DB = process.env.QUESTION_DB_URL;
 
 mongoose
   .connect(DB, {
@@ -31,10 +26,12 @@ app.use(function (req, res, next) {
   next();
 });
 
-let port = process.env.PORT_NUMBER || 3005;
+let port = 3005;
 
 app.listen(port, () => {
   console.log(`Question-service running on port ${port}`);
 });
 
-app.get("/questions", getRandomQuestionByDifficulty);
+app.get("/questions", getAQuestion);
+
+export default app;

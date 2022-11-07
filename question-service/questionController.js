@@ -1,4 +1,5 @@
 import Question from "./questionModel.js";
+import { Types } from "mongoose";
 
 export const getAllQuestions = async (req, res, next) => {
   const questions = await Question.find();
@@ -8,6 +9,8 @@ export const getAllQuestions = async (req, res, next) => {
     data: questions,
   });
 };
+
+const { ObjectId } = Types;
 
 export const getAllQuestionsByDifficulty = async (req, res, next) => {
   console.log(req.query.difficulty);
@@ -25,13 +28,32 @@ export const getAllQuestionsByDifficulty = async (req, res, next) => {
   });
 };
 
+export const getAQuestion = async (req, res, next) => {
+  if (req.query.id) {
+    return getQuestionByID(req, res, next);
+  } else {
+    return getRandomQuestionByDifficulty(req, res, next);
+  }
+};
+
 export const getQuestionByID = async (req, res, next) => {
+  if (!ObjectId.isValid(req.query.id)) {
+    return res.status(500).json({
+      status: "Invalid Question Id",
+    });
+  }
   const question = await Question.findById(req.query.id);
 
-  return res.status(200).json({
-    status: "success",
-    data: question,
-  });
+  if (question) {
+    return res.status(200).json({
+      status: "success",
+      data: question,
+    });
+  } else {
+    return res.status(404).json({
+      status: "Not Found",
+    });
+  }
 };
 
 export const getRandomQuestionByDifficulty = async (req, res, next) => {
