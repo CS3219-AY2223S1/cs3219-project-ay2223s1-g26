@@ -6,13 +6,10 @@ import * as path from "path";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 import {
-  readSocketsQuery,
   insertSocketsQuery,
   deleteSocketsQuery,
   readSocketsByUuidQuery,
-  insertWaitingQuery,
   getMatchQuery,
-  readWaitingQuery,
   deleteWaitingQuery,
   deleteSocketsByUuidQuery,
 } from "./match/database.js";
@@ -110,7 +107,7 @@ var clientDir = path.join(__dirname, "public");
 app.use("/", express.static(clientDir));
 
 //Send static HTML file
-app.get("/", (req, res) => {s
+app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public/index.html"));
 });
 
