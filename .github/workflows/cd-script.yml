@@ -126,6 +126,5 @@ jobs:
         args: deploy --only functions
       # Define environment variables
       env:
-        PROJECT_PATH: ./user-service
         FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
 
