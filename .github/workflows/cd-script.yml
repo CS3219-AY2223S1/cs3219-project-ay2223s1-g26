@@ -8,7 +8,7 @@ on:
       - closed
     branches: [ main ]
   push:
-    branches: [ feat/ci ]
+    branches: [ feat/ci, fix/fix-firebase-cd ]
 
 jobs:
   deploy_matching_service:
@@ -99,7 +99,7 @@ jobs:
           tags: ryantanlien99/peerprep:question-service
 
   deploy_firebase:
-    if: github.event.pull_request.merged == true
+    #if: github.event.pull_request.merged == true
     # Define environment (Below secrets are only defined in the environment and not globally)
     environment: cs3219-team-26
 
