@@ -119,7 +119,6 @@ jobs:
         cd functions
         npm install
         cd ..
-        firebase use peerprep-userser
     # Deploying the functions to firebase
     - name:  Deploy user-service
       uses: w9jds/firebase-action@master
