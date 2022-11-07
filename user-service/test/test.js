@@ -1,7 +1,6 @@
 import chai from 'chai'
 import {describe, it} from 'mocha'
 import chaiHttp from 'chai-http'
-import fs from 'fs'
 import axios from 'axios'
 const url = 'http://localhost:5001/peerprep-userser/us-central1/api'
 import admin from "firebase-admin";
