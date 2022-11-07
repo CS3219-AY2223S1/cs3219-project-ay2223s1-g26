@@ -122,7 +122,7 @@ jobs:
         npm install
 
     # Deploying the functions to firebase
-    - name:  Deploy to Firebase
+    - name:  Deploy to user-service
       uses: w9jds/firebase-action@master
       with:
         args: deploy --only functions
