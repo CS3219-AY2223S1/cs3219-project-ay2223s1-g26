@@ -6,7 +6,7 @@ import { getAQuestion } from "./questionController.js";
 
 dotenv.config({ path: "./.env" });
 
-const DB = process.env.QUESTION_DB_URL;
+const DB = process.env.DATABASE_URL;
 
 mongoose
   .connect(DB, {
