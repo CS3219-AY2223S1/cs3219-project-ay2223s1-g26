@@ -38,7 +38,11 @@ const PartnerLeftModal = ({
   };
 
   return (
-    <Modal isOpen={partnerLeave} style={modalStyle}>
+    <Modal
+      isOpen={partnerLeave}
+      style={modalStyle}
+      shouldCloseOnOverlayClick={true}
+    >
       <h1>Partner has left the session</h1>
       <h3 style={{ textAlign: "center" }}>
         Return to the matching lobby to find a new partner
