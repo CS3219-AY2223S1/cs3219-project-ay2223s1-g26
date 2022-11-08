@@ -2,7 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 
-import { getAQuestion } from "./questionController.js";
+import { getAQuestion, getAllQuestions } from "./questionController.js";
 
 dotenv.config({ path: "./.env" });
 
@@ -33,5 +33,6 @@ app.listen(port, () => {
 });
 
 app.get("/questions", getAQuestion);
+app.get("/allQuestions", getAllQuestions);
 
 export default app;
