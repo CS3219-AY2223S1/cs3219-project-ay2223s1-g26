@@ -59,7 +59,6 @@ jobs:
         npm install -g firebase-tools
         # npm ci
         firebase emulators:exec --project peerprep-userser "npm test"
-        
     - name: Build and test collab-service
       run: |
         cd collab-service
@@ -74,7 +73,7 @@ jobs:
         npm test
         cd ..
 
-    - name: Build and test collab-service
+    - name: Build and test question-service
       run: |
         cd question-service
         pwd
