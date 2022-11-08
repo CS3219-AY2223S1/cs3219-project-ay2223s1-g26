@@ -2,12 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 
-import {
-  getAllQuestions,
-  getAllQuestionsByDifficulty,
-  getQuestionByID,
-  getRandomQuestionByDifficulty,
-} from "./questionController.js";
+import { getAQuestion, getAllQuestions } from "./questionController.js";
 
 dotenv.config({ path: "./.env" });
 
@@ -31,10 +26,13 @@ app.use(function (req, res, next) {
   next();
 });
 
-let port = process.env.PORT_NUMBER || 3005;
+let port = 3005;
 
 app.listen(port, () => {
   console.log(`Question-service running on port ${port}`);
 });
 
-app.get("/questions", getRandomQuestionByDifficulty);
+app.get("/questions", getAQuestion);
+app.get("/allQuestions", getAllQuestions);
+
+export default app;

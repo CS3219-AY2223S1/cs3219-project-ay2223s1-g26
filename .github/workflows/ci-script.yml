@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [ main ]
   push:
-    branches: [ feat/ci , firebase-testing, feat/collab-service-ci ]
+    branches: [ feat/ci , firebase-testing, feat/collab-service-ci, feat/question-service-ci ]
 
 jobs:
   build:
@@ -70,6 +70,16 @@ jobs:
         echo 'AWS_SOCKET_DB=${{secrets.AWS_SOCKET_DB}}' >> .env
         echo 'AWS_SOCKET_DB_PASSWORD=${{secrets.AWS_SOCKET_DB_PASSWORD}}' >> .env
         echo 'AWS_SOCKET_DB_PORT=${{secrets.AWS_SOCKET_DB_PORT}}' >> .env
+        npm install
+        npm test
+        cd ..
+
+    - name: Build and test question-service
+      run: |
+        cd question-service
+        pwd
+        touch .env
+        echo 'DATABASE_URL=${{secrets.DATABASE_URL}}' >> .env
         npm install
         npm test
         cd ..
