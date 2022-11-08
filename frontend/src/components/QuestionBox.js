@@ -4,7 +4,12 @@ import "./QuestionBox.css";
 import ChangeQuestionButton from "./ChangeQuestionButton";
 import ChangeQuestionModal from "./ChangeQuestionModal";
 
-const QuestionBox = ({ questionProp, questionList, handleChangeQuestion }) => {
+const QuestionBox = ({
+  questionProp,
+  questionList,
+  handleChangeQuestion,
+  setQuestionProp,
+}) => {
   const [question, setQuestion] = useState("");
   const [openChangeQuestionModal, setOpenChangeQuestionModal] = useState(false);
 
@@ -19,6 +24,7 @@ const QuestionBox = ({ questionProp, questionList, handleChangeQuestion }) => {
         openChangeQuestionModal={openChangeQuestionModal}
         questionList={questionList}
         setQuestion={setQuestion}
+        setQuestionRoot={setQuestionProp}
         question={questionProp}
         handleChangeQuestion={handleChangeQuestion}
       />

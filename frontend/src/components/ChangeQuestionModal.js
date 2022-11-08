@@ -10,6 +10,7 @@ const ChangeQuestionModal = ({
   setOpenChangeQuestionModal,
   questionList,
   setQuestion,
+  setQuestionRoot,
   question,
   handleChangeQuestion,
 }) => {
@@ -18,8 +19,9 @@ const ChangeQuestionModal = ({
   const handleChangeQuestionButtonPress = () => {
     console.log("change question: ", question);
     setQuestion(selectedQuestion.question);
+    setQuestionRoot(selectedQuestion);
     setOpenChangeQuestionModal(false);
-    handleChangeQuestion(question);
+    handleChangeQuestion(selectedQuestion);
   };
 
   return (

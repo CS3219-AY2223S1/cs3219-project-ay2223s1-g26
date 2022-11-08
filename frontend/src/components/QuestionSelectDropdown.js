@@ -50,6 +50,7 @@ export default function QuestionSelectDropdown({
           labelId="question-label"
           id="question-selection"
           onChange={handleQuestionChange}
+          disabled={difficulty == ""}
         >
           {questionList
             .filter((question) => question.difficulty === difficulty)
