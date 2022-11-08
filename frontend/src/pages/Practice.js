@@ -5,6 +5,7 @@ import { io } from "socket.io-client";
 
 import CommonEditor from "../components/CommonEditor";
 import QuestionBox from "../components/QuestionBox";
+import ChangeQuestionModal from "../components/ChangeQuestionModal";
 import Chat from "../components/Chat";
 import EasyQuestion from "../resources/Easy.md";
 import MediumQuestion from "../resources/Medium.md";
@@ -20,6 +21,7 @@ function Practice() {
   const [difficulty, setDifficulty] = useState(null);
   const [roomid, setRoomid] = useState(null);
   const [question, setQuestion] = useState({});
+  const [questionList, setQuestionList] = useState([]);
 
   useEffect(() => {
     setUuid1(location.state?.uuid1);
@@ -28,11 +30,6 @@ function Practice() {
     setDifficulty(location.state?.difficulty?.toUpperCase());
 
     const fetchQuestion = async () => {
-      const QUESTIONS = {
-        EASY: EasyQuestion,
-        MEDIUM: MediumQuestion,
-        HARD: HardQuestion,
-      };
       let intSeed = 0;
       for (let c of roomid) {
         if (!Number.isNaN(parseInt(c))) intSeed += parseInt(c);
@@ -45,7 +42,22 @@ function Practice() {
       setQuestion(question?.data?.data);
     };
 
-    if (roomid) fetchQuestion();
+    const fetchAllQuestons = async () => {
+      let intSeed = 0;
+      for (let c of roomid) {
+        if (!Number.isNaN(parseInt(c))) intSeed += parseInt(c);
+      }
+      const request = `http://question-service-load-balancer-1091982636.ap-southeast-1.elb.amazonaws.com/allQuestions`;
+      const questions = await axios.get(request).catch((err) => {
+        console.log(err);
+      });
+      setQuestionList(questions?.data?.data);
+    };
+
+    if (roomid) {
+      fetchQuestion();
+      fetchAllQuestons();
+    }
   }, [location.state, roomid, difficulty]);
 
   useEffect(() => {
@@ -58,10 +70,25 @@ function Practice() {
     );
   }, []);
 
+  const handlePartnerChangeQuestion = (question) => {
+    setQuestion(question);
+  };
+
+  const handleChangeQuestion = (question) => {
+    console.log("emmitting: ", question);
+    socket.emit("change question", question);
+  };
   return (
     <div className="practiceContainer">
       <div className="questionAndChat">
-        {question && <QuestionBox questionProp={question} />}
+        {question && (
+          <QuestionBox
+            setQuestionProp={setQuestion}
+            questionProp={question}
+            questionList={questionList}
+            handleChangeQuestion={handleChangeQuestion}
+          />
+        )}
         <Chat socket={socket} />
       </div>
       <CommonEditor
@@ -70,6 +97,7 @@ function Practice() {
         roomid={roomid}
         question={question}
         socket={socket}
+        handlePartnerChangeQuestion={handlePartnerChangeQuestion}
       />
     </div>
   );

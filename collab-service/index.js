@@ -6,9 +6,9 @@ const { Pool } = require("pg");
 const { config } = require("dotenv");
 const app = express();
 
-if (process.env.NODE_ENV !== 'production') { 
-  config(); 
-} 
+if (process.env.NODE_ENV !== "production") {
+  config();
+}
 
 const httpServer = createServer(app);
 
@@ -16,7 +16,7 @@ const io = new Server(httpServer, {
   cors: { origin: "*", methods: ["GET", "POST"] },
 });
 
-const user =  process.env.AWS_SOCKET_DB_USER;
+const user = process.env.AWS_SOCKET_DB_USER;
 const host = process.env.AWS_SOCKET_DB_ENDPOINT;
 const database = process.env.AWS_SOCKET_DB;
 const password = process.env.AWS_SOCKET_DB_PASSWORD;
@@ -27,7 +27,7 @@ const pool = new Pool({
   host: host,
   database: database,
   password: password,
-  port: port
+  port: port,
 });
 
 pool.query(`
@@ -48,6 +48,9 @@ io.on("connection", (socket) => {
     });
     socket.on("message", (msg) => {
       io.to(args.roomid).emit("message", msg);
+    });
+    socket.on("change question", (question) => {
+      io.to(args.roomid).emit("partner changed question", question);
     });
     socket.on("leave", () => {
       io.to(args.roomid).emit("left");

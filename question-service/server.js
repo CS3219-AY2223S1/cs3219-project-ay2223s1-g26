@@ -33,6 +33,7 @@ app.listen(port, () => {
 });
 
 app.get("/questions", getAQuestion);
+
 app.get("/allQuestions", getAllQuestions);
 
 export default app;
