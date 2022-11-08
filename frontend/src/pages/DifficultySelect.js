@@ -14,7 +14,7 @@ import { context } from "../context";
 import DifficultyCard from "../components/DifficultyCard";
 import TimedLoader from "../components/TimedLoader";
 
-const Difficulties = ['Easy', 'Medium', 'Hard']
+const Difficulties = ["Easy", "Medium", "Hard"];
 
 var msSocket;
 var timer;
@@ -27,7 +27,6 @@ function DifficultySelect() {
   const [partnerUuid, setPartnerUuid] = useState();
   const [roomUuid, setRoomUuid] = useState();
   const [questionSeed, setQuestionSeed] = useState(null);
-  
 
   const { user } = useContext(context);
   // console.log("user gotten from context: ", user?.displayName);
@@ -66,7 +65,7 @@ function DifficultySelect() {
         msSocket.emit("deregister", user.uid, numberOfRetries + 1);
       }
     });
-  }, [user.user.uid]);
+  }, [user.user]);
 
   useEffect(() => {
     if (isMatched) {
@@ -143,41 +142,51 @@ function DifficultySelect() {
 
   return (
     <div>
-      {isConnecting
-        ? (<TimedLoader loading={isConnecting} difficulty={difficulty}/>)
-        : (<>
-            {user && <div style={{
-                fontSize:30,
-                fontWeight:400,
+      {isConnecting ? (
+        <TimedLoader loading={isConnecting} difficulty={difficulty} />
+      ) : (
+        <>
+          {user && (
+            <div
+              style={{
+                fontSize: 30,
+                fontWeight: 400,
                 marginTop: -30,
-                justifyContent: 'center',
-                alignItems: 'center'
-              }}>
-                What difficulty would you like to attempt <span style={{color: '#1b76d2'}}>{user.displayName}</span> ?
-              </div>
-            }
-            <Grid container spacing={1} style={{marginTop: 25}}>
-              {Difficulties.map((difficulty, i) => (
-                <Grid item xs={4}>
-                  <DifficultyCard
-                    difficulty={difficulty}
-                    handleDifficultyButton={handleDifficultyButton}
-                    buttonsEnabled={buttonsEnabled}/>
-                </Grid>
-              ))}
-            </Grid>
-            <Snackbar
-              open={timeoutSnackbarOpen}
-              autoHideDuration={6000}
-              onClose={handleClose}
-              anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                justifyContent: "center",
+                alignItems: "center",
+              }}
             >
-              <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
-                No match could be found! Returning to difficulty select.
-              </Alert>
-            </Snackbar>
-        </>)
-      }
+              What difficulty would you like to attempt{" "}
+              <span style={{ color: "#1b76d2" }}>{user.displayName}</span> ?
+            </div>
+          )}
+          <Grid container spacing={1} style={{ marginTop: 25 }}>
+            {Difficulties.map((difficulty, i) => (
+              <Grid item xs={4}>
+                <DifficultyCard
+                  difficulty={difficulty}
+                  handleDifficultyButton={handleDifficultyButton}
+                  buttonsEnabled={buttonsEnabled}
+                />
+              </Grid>
+            ))}
+          </Grid>
+          <Snackbar
+            open={timeoutSnackbarOpen}
+            autoHideDuration={6000}
+            onClose={handleClose}
+            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+          >
+            <Alert
+              onClose={handleClose}
+              severity="error"
+              sx={{ width: "100%" }}
+            >
+              No match could be found! Returning to difficulty select.
+            </Alert>
+          </Snackbar>
+        </>
+      )}
     </div>
   );
 }

@@ -9,7 +9,14 @@ import LoadCodeModal from "./LoadCodeModal";
 import { useNavigate } from "react-router";
 import { context } from "../context";
 
-const CommonEditor = ({ uuid1, uuid2, roomid, socket, question }) => {
+const CommonEditor = ({
+  uuid1,
+  uuid2,
+  roomid,
+  socket,
+  question,
+  handlePartnerChangeQuestion,
+}) => {
   const navigate = useNavigate();
   // Determine user and partner ID to use based on environment
   const { $axios } = useContext(context);
@@ -29,6 +36,7 @@ const CommonEditor = ({ uuid1, uuid2, roomid, socket, question }) => {
     });
     socket.on("text", handleChangeReceived);
     socket.on("left", handlePartnerLeave);
+    socket.on("partner changed question", handlePartnerChangeQuestion);
     setClientSocket(socket);
   }, [uuid1, uuid2, roomid, socket]);
 
@@ -117,7 +125,7 @@ const CommonEditor = ({ uuid1, uuid2, roomid, socket, question }) => {
           <Editor
             height="100%"
             defaultLanguage="javascript"
-            defaultValue="Type your code here"
+            defaultValue="Language: JavaScript"
             theme="vs-dark"
             onChange={handleChangeEmitted}
             value={textValue}
