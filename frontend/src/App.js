@@ -16,7 +16,7 @@ import Practice from "./pages/Practice";
 function App() {
   const [user, loading, error] = useAuthState(auth);
   const [isLoading, setIsLoading] = React.useState(false);
-  const api = "https://us-central1-peerprep-userser.cloudfunctions.net/api";
+  const api = "https://us-central1-peerprep-userser.cloudfunctions.net/api/api";
   const defaultOptions = {
     baseURL: api,
     headers: {
