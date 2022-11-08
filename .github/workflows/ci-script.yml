@@ -78,7 +78,7 @@ jobs:
         cd question-service
         pwd
         touch .env
-        echo 'QUESTION_DB_URL=${{secrets.QUESTION_DB_URL}}' >> .env
+        echo 'DATABASE_URL=${{secrets.DATABASE_URL}}' >> .env
         npm install
         npm test
         cd ..

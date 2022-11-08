@@ -65,7 +65,7 @@ function DifficultySelect() {
         msSocket.emit("deregister", user.uid, numberOfRetries + 1);
       }
     });
-  }, [user.user]);
+  }, [user?.uid]);
 
   useEffect(() => {
     if (isMatched) {
