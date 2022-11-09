@@ -40,7 +40,11 @@ function Practice() {
     setDifficulty(location.state?.difficulty?.toUpperCase());
 
     const fetchQuestion = async () => {
-      const request = `${questionEndPoint}/questions?difficulty=${difficulty}`;
+      let intSeed = 0;
+      for (let c of roomid) {
+        if (!Number.isNaN(parseInt(c))) intSeed += parseInt(c);
+      }
+      const request = `${questionEndPoint}/questions?difficulty=${difficulty}&seed=${intSeed}`;
       const question = await axios.get(request).catch((err) => {
         console.log("error fetching qn: ", location.state?.difficulty);
         console.log(err);
