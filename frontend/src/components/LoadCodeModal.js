@@ -30,7 +30,7 @@ const LoadCodeModal = ({
   };
 
   return (
-    <Modal isOpen={openLoadCodeModal}>
+    <Modal isOpen={openLoadCodeModal} shouldCloseOnOverlayClick={true}>
       <div className="loadCodeModalContainer">
         <h1 style={{ textAlign: "center" }}>
           Below is your most recently saved code
@@ -50,6 +50,15 @@ const LoadCodeModal = ({
           onClick={handleRestoreButtonPress}
         >
           {"Restore to session"}
+        </Button>
+        <Button
+          size="large"
+          variant="outlined"
+          width="20%"
+          style={{ ...buttonStyle, marginTop: "1vh" }}
+          onClick={() => setOpenLoadCodeModal(false)}
+        >
+          {"Cancel"}
         </Button>
       </div>
     </Modal>

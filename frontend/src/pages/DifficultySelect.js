@@ -1,12 +1,4 @@
-import {
-  ButtonGroup,
-  Button,
-  Grid,
-  Typography,
-  Snackbar,
-  Alert,
-  CircularProgress,
-} from "@mui/material";
+import { Grid, Snackbar, Alert } from "@mui/material";
 import { useEffect, useState, useCallback, useContext } from "react";
 import { io } from "socket.io-client";
 import { useNavigate } from "react-router-dom";
@@ -29,12 +21,14 @@ function DifficultySelect() {
   const [questionSeed, setQuestionSeed] = useState(null);
 
   const { user } = useContext(context);
-  // console.log("user gotten from context: ", user?.displayName);
 
   useEffect(() => {
-    msSocket = io(
-      "matching-network-load-balancer-dae844dd94888ac6.elb.ap-southeast-1.amazonaws.com"
-    );
+    const endpoint =
+      process.env.REACT_APP_ENV === "prod"
+        ? process.env.REACT_APP_PROD_MATCHING_SERVICE_ENDPOINT
+        : process.env.REACT_APP_DEV_MATCHING_SERVICE_ENDPOINT;
+
+    msSocket = io(endpoint);
 
     msSocket.on("connected", () => {
       console.log("connected to match service!");

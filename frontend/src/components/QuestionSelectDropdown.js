@@ -12,6 +12,7 @@ export default function QuestionSelectDropdown({
   questionProp,
   setQuestionProp,
   handleChangeQuestionButtonPress,
+  handleCloseModal,
 }) {
   const [difficulty, setDifficulty] = useState("");
 
@@ -27,7 +28,7 @@ export default function QuestionSelectDropdown({
 
   return (
     <div class="questionSelectContainer">
-      <FormControl sx={{ m: 1, minWidth: "30%" }}>
+      <FormControl sx={{ m: 1, minWidth: "20%" }}>
         <InputLabel id="difficulty-select">Difficulty</InputLabel>
         <Select
           value={difficulty}
@@ -44,7 +45,7 @@ export default function QuestionSelectDropdown({
           })}
         </Select>
       </FormControl>
-      <FormControl sx={{ m: 1, minWidth: "50%" }}>
+      <FormControl sx={{ m: 1, minWidth: "40%" }}>
         <InputLabel id="question-label">Question</InputLabel>
         <Select
           labelId="question-label"
@@ -66,12 +67,21 @@ export default function QuestionSelectDropdown({
       <Button
         size="large"
         variant="outlined"
-        width="20%"
+        width="15%"
         style={buttonStyle}
         onClick={handleChangeQuestionButtonPress}
         disabled={questionProp == undefined}
       >
         {"Confirm Change Question"}
+      </Button>
+      <Button
+        size="large"
+        variant="outlined"
+        width="15%"
+        style={buttonStyle}
+        onClick={handleCloseModal}
+      >
+        {"Cancel"}
       </Button>
     </div>
   );
