@@ -1,0 +1,131 @@
+name: CD
+
+# Controls when the action will run. Triggers the workflow on push
+# events but only for the master branch
+on:
+  pull_request:
+    types:
+      - closed
+    branches: [ main ]
+  push:
+    branches: [ feat/ci ]
+
+jobs:
+  deploy_matching_service:
+    if: github.event.pull_request.merged == true
+    # Define environment (Below secrets are only defined in the environment and not globally)
+    environment: cs3219-team-26
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v3
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: ./matching-service
+          push: true
+          tags: ryantanlien99/peerprep:matching-service
+
+  deploy_collab_service:
+    if: github.event.pull_request.merged == true
+    # Define environment (Below secrets are only defined in the environment and not globally)
+    environment: cs3219-team-26
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v3
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: ./collab-service
+          push: true
+          tags: ryantanlien99/peerprep:collab-service
+          
+  deploy_question_service:
+    if: github.event.pull_request.merged == true
+    # Define environment (Below secrets are only defined in the environment and not globally)
+    environment: cs3219-team-26
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v3
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: ./question-service
+          push: true
+          tags: ryantanlien99/peerprep:question-service
+
+  deploy_user_service:
+    if: github.event.pull_request.merged == true
+    # Define environment (Below secrets are only defined in the environment and not globally)
+    environment: cs3219-team-26
+
+    # Define environment variables
+    env:
+      FIREBASE_TOKEN: ${{secrets.FIREBASE_TOKEN}}
+      PROJECT_PATH: ./user-service
+
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v2
+    
+    # Cd to user-service
+    - name: Change directory to user-service
+      run: |
+        cd user-service
+        npm install
+
+    # Deploying the functions to firebase
+    - name:  Deploy to user-service
+      uses: w9jds/firebase-action@master
+      with:
+        args: deploy --only functions
+      env:
+        FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+

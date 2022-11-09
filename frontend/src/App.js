@@ -1,20 +1,102 @@
-import {BrowserRouter as Router, Routes, Route, Navigate} from "react-router-dom";
-import SignupPage from './components/SignupPage';
-import {Box} from "@mui/material";
+import { Routes, Route, Navigate } from "react-router-dom";
+import * as React from "react";
+import LoginPage from "./pages/LoginPage";
+import Error from "./pages/Error";
+import Dashboard from "./pages/Dashboard";
+import NavBar from "./components/NavBar";
+import Box from "@mui/material/Box";
+import { context } from "./context";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "./firebase";
+import axios from "axios";
+import Loader from "./components/Loader";
+import DifficultySelect from "./pages/DifficultySelect";
+import Practice from "./pages/Practice";
 
 function App() {
-    return (
-        <div className="App">
-            <Box display={"flex"} flexDirection={"column"} padding={"4rem"}>
-                <Router>
+  const [user, loading, error] = useAuthState(auth);
+  const [isLoading, setIsLoading] = React.useState(false);
+
+  const api =
+    process.env.REACT_APP_ENV === "prod"
+      ? process.env.REACT_APP_PROD_USER_SERVICE_ENDPOINT
+      : process.env.REACT_APP_DEV_USER_SERVICE_ENDPOINT;
+  const defaultOptions = {
+    baseURL: api,
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+    },
+  };
+  let $axios = axios.create(defaultOptions);
+  React.useEffect(() => {
+    setIsLoading(loading);
+  }, [loading]);
+
+  React.useEffect(() => {
+    async function refreshIdToken() {
+      if (!user) {
+        return;
+      }
+      setIsLoading(true);
+      const idToken = await user.getIdToken();
+      axios.defaults.headers.common["Authorization"] = `Bearer ${idToken}`;
+      console.log("idToken: ", idToken);
+      setIsLoading(false);
+    }
+    refreshIdToken();
+  }, [user]);
+
+  return (
+    <>
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <>
+          {error ? (
+            <Error />
+          ) : (
+            <context.Provider
+              value={{
+                user,
+                $axios,
+                isLoading,
+                setIsLoading,
+                error,
+              }}
+            >
+              <div className="App">
+                <NavBar />
+                <Box display={"flex"} flexDirection={"column"} padding={"4rem"}>
+                  {user ? (
                     <Routes>
-                        <Route exact path="/" element={<Navigate replace to="/signup" />}></Route>
-                        <Route path="/signup" element={<SignupPage/>}/>
+                      <Route path="/dashboard" element={<Dashboard />} />
+                      <Route
+                        path="/difficultySelect"
+                        element={<DifficultySelect />}
+                      />
+                      <Route path="/practice" element={<Practice />} />
+                      <Route
+                        path="/"
+                        element={<Navigate replace to="/dashboard" />}
+                      />
                     </Routes>
-                </Router>
-            </Box>
-        </div>
-    );
+                  ) : (
+                    <Routes>
+                      <Route path="/login" element={<LoginPage />} />
+                      <Route
+                        path="/"
+                        element={<Navigate replace to="/login" />}
+                      />
+                    </Routes>
+                  )}
+                </Box>
+              </div>
+            </context.Provider>
+          )}
+        </>
+      )}
+    </>
+  );
 }
 
 export default App;

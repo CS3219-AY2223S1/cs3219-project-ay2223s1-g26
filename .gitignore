@@ -1,0 +1,13 @@
+#ignore node_modules folder in all sub-folders
+node_modules
+user-service/firebase-debug.log
+user-service/firestore-debug.log
+user-service/ui-debug.log
+user-service/.env.json
+frontend/.env.json
+frontend/src/.env.json
+.env
+
+
+# Local Netlify folder
+.netlify

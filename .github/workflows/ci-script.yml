@@ -1,0 +1,84 @@
+name: CI
+
+# Controls when the action will run. Triggers the workflow on push
+# events but only for the master branch
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ feat/ci , firebase-testing, feat/collab-service-ci, feat/question-service-ci ]
+
+jobs:
+  build:
+  
+    # Define environment (Below secrets are only defined in the environment and not globally)
+    environment: cs3219-team-26
+
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v2
+
+    # Run npm install and npm test on matching-service
+    - name: Build and test matching-service
+      run: |
+        cd matching-service
+        pwd
+        touch .env
+        echo 'AWS_DB=${{secrets.AWS_DB}}' >> .env
+        echo 'AWS_DB_USER=${{secrets.AWS_DB_USER}}' >> .env
+        echo 'AWS_DB_PASSWORD=${{secrets.AWS_DB_PASSWORD}}' >> .env
+        echo 'AWS_DB_ENDPOINT=${{secrets.AWS_DB_ENDPOINT}}' >> .env
+        echo 'AWS_DB_PORT=${{secrets.AWS_DB_PORT}}' >> .env
+        echo 'AWS_SOCKET_DB=${{secrets.AWS_SOCKET_DB}}' >> .env
+        echo 'AWS_SOCKET_DB_USER=${{secrets.AWS_SOCKET_DB_USER}}' >> .env
+        echo 'AWS_SOCKET_DB_PASSWORD=${{secrets.AWS_SOCKET_DB_PASSWORD}}' >> .env
+        echo 'AWS_SOCKET_DB_ENDPOINT=${{secrets.AWS_SOCKET_DB_ENDPOINT}}' >> .env
+        echo 'AWS_SOCKET_DB_PORT=${{secrets.AWS_SOCKET_DB_PORT}}' >> .env
+        cat .env
+        npm install
+        npm test
+        cd ..
+    
+    - name: Build and test user-service
+      run: |
+        cd user-service
+        pwd
+        touch .env
+        echo 'FIREBASE_API_KEY=${{secrets.FIREBASE_API_KEY}}' >> .env
+        echo 'PRIVATE_ID_KEY=${{secrets.PRIVATE_ID_KEY}}' >> .env
+        echo 'CLIENT_ID=${{secrets.CLIENT_ID}}' >> .env
+        echo 'PRIVATE_KEY=${{secrets.PRIVATE_KEY}}' >> .env
+        npm install
+        cat .env
+        cd functions
+        npm install
+        cd ..
+        npm install -g firebase-tools
+        # npm ci
+        firebase emulators:exec --project peerprep-userser "npm test"
+    - name: Build and test collab-service
+      run: |
+        cd collab-service
+        pwd
+        touch .env
+        echo 'AWS_SOCKET_DB_USER=${{secrets.AWS_SOCKET_DB_USER}}' >> .env
+        echo 'AWS_SOCKET_DB_ENDPOINT=${{secrets.AWS_SOCKET_DB_ENDPOINT}}' >> .env
+        echo 'AWS_SOCKET_DB=${{secrets.AWS_SOCKET_DB}}' >> .env
+        echo 'AWS_SOCKET_DB_PASSWORD=${{secrets.AWS_SOCKET_DB_PASSWORD}}' >> .env
+        echo 'AWS_SOCKET_DB_PORT=${{secrets.AWS_SOCKET_DB_PORT}}' >> .env
+        npm install
+        npm test
+        cd ..
+
+    - name: Build and test question-service
+      run: |
+        cd question-service
+        pwd
+        touch .env
+        echo 'DATABASE_URL=${{secrets.DATABASE_URL}}' >> .env
+        npm install
+        npm test
+        cd ..
