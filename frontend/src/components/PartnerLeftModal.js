@@ -10,6 +10,7 @@ const PartnerLeftModal = ({
   handleSave,
   textChanged,
   setTextChanged,
+  completed,
 }) => {
   const navigate = useNavigate();
   const modalStyle = {
@@ -21,7 +22,7 @@ const PartnerLeftModal = ({
       boxSizing: "border-box",
     },
     content: {
-      margin: "20vh 30vw",
+      margin: "20vh 15vw",
       boxSizing: "border-box",
       display: "flex",
       flexDirection: "column",
@@ -75,6 +76,7 @@ const PartnerLeftModal = ({
           width="20%"
           style={buttonStyle}
           onClick={handleCompleted}
+          disabled={completed}
         >
           Completed
         </Button>

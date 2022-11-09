@@ -26,8 +26,8 @@ In root directory of the project
 ### Frontend
 1. In another terminal, change directory to frontend directory using `cd frontend`
 2. Install npm packages using `npm i`
-3. Run first instance of the app locally using `npm run produser1` ![run frontend command](./README_images//frontend.png)
-4. Run second instance of the app locally using `npm run produser2`
+3. Run first instance of the app locally using `npm run devuser1` ![run frontend command](./README_images//frontend.png)
+4. Run second instance of the app locally using `npm run devuser2`
 5. In your web browser, two separate tabs should be open
 6. Sign in with two different Google accounts for testing ![frontend](./README_images//two_instances.png)
 

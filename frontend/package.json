@@ -7,8 +7,8 @@
     "build": "react-scripts build && react-scripts start",
     "test": "react-scripts test",
     "lint": "npx eslint .",
-    "devuser1": "cross-env PORT=4000 REACT_APP_ENV=dev react-scripts start",
-    "devuser2": "cross-env PORT=4001 REACT_APP_ENV=devreact-scripts start",
+    "devuser1": "cross-env PORT=4001 REACT_APP_ENV=dev react-scripts start",
+    "devuser2": "cross-env PORT=4002 REACT_APP_ENV=dev react-scripts start",
     "produser1": "cross-env PORT=4001 REACT_APP_ENV=prod react-scripts start",
     "produser2": "cross-env PORT=4002 REACT_APP_ENV=prod react-scripts start"
   },

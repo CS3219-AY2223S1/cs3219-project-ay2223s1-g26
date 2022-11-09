@@ -36,6 +36,8 @@ async function addQuestionAttempt(res, admin, uid, questionId, questionDifficult
     const userRef = admin.firestore().collection('users').doc(uid)
     const userDoc = await userRef.get()
     const existingData = userDoc.data()
+    const isAttemptedBefore = questionId in existingData.questionsAttempted
+    functions.logger.log('Question attempted before', isAttemptedBefore)
     const questionObj = {
       [questionId] : {
         questionTitle,
@@ -53,11 +55,19 @@ async function addQuestionAttempt(res, admin, uid, questionId, questionDifficult
         Object.assign(newDifficultyMap, {[diff]: oldDifficultyMap[diff]})
       }
     }
-    await userRef.set({
-      questionsAttempted: questionObj,
-      questionDifficulty: newDifficultyMap,
-      updatedAt: admin.firestore.FieldValue.serverTimestamp()
-    }, {merge: true})
+    if (isAttemptedBefore) {
+      await userRef.set({
+        questionsAttempted: questionObj,
+        updatedAt: admin.firestore.FieldValue.serverTimestamp()
+      }, {merge: true})
+    } else {
+      await userRef.set({
+        questionsAttempted: questionObj,
+        questionDifficulty: newDifficultyMap,
+        updatedAt: admin.firestore.FieldValue.serverTimestamp()
+      }, {merge: true})
+    }
+    
     res.sendStatus(200)
   } catch (e) {
     functions.logger.error(e)
