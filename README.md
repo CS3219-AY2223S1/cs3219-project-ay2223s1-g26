@@ -13,7 +13,7 @@ Prerequisites
 
 In root directory of the project
 1. Run `docker compose --profile local build` ![docker command 1](./README_images//docker_compose.png)
-2. Run `docker compose --profile local up`
+2. Run `docker compose --profile local up` ![docker command 1](./README_images//docker_run.png)
 
 ### User Service
 1. In another terminal, Change directory to user-service directory using `cd user-service`
