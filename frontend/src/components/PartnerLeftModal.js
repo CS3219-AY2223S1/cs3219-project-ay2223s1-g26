@@ -10,6 +10,7 @@ const PartnerLeftModal = ({
   handleSave,
   textChanged,
   setTextChanged,
+  completed,
 }) => {
   const navigate = useNavigate();
   const modalStyle = {
@@ -75,6 +76,7 @@ const PartnerLeftModal = ({
           width="20%"
           style={buttonStyle}
           onClick={handleCompleted}
+          disabled={completed}
         >
           Completed
         </Button>

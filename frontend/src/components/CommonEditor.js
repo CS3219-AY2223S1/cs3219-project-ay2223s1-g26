@@ -31,6 +31,7 @@ const CommonEditor = ({
   const [loadedCode, setLoadedCode] = useState("");
   const [snackbarContent, setSnackbarContent] = useState("");
   const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [completed, setCompleted] = useState(false);
 
   useEffect(() => {
     if (!socket) return;
@@ -101,6 +102,7 @@ const CommonEditor = ({
   const handleCompleted = () => {
     setSnackbarContent("Question attemped marked as Completed");
     setSnackbarOpen(true);
+    setCompleted(true);
     $axios.post(`${$axios.defaults.baseURL}/addQuestionAttempt`, {
       questionId: question._id,
       questionDifficulty: question.difficulty,
@@ -121,7 +123,7 @@ const CommonEditor = ({
     <>
       <Snackbar
         open={snackbarOpen}
-        autoHideDuration={6000}
+        autoHideDuration={3000}
         onClose={() => setSnackbarOpen(false)}
         message={snackbarContent}
       />
@@ -131,6 +133,7 @@ const CommonEditor = ({
         handleSave={handleSave}
         textChanged={textChanged}
         setTextChanged={setTextChanged}
+        completed={completed}
       />
       <LoadCodeModal
         openLoadCodeModal={openLoadCodeModal}
@@ -156,6 +159,8 @@ const CommonEditor = ({
             textChanged={textChanged}
             setTextChanged={setTextChanged}
             handleLoadButtonPress={handleLoadButtonPress}
+            completed={completed}
+            setCompleted={setCompleted}
           />
         </div>
       </div>

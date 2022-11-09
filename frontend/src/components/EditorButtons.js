@@ -9,9 +9,9 @@ const EditorButtons = ({
   handleLoadButtonPress,
   textChanged,
   setTextChanged,
+  completed,
 }) => {
   const buttonStyle = { flex: 1, height: "80%" };
-
   const handleLeaveButtonPress = () => {
     handleLeave();
   };
@@ -57,6 +57,7 @@ const EditorButtons = ({
         width="20%"
         style={buttonStyle}
         onClick={handleCompleted}
+        disabled={completed}
       >
         Completed
       </Button>
