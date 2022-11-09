@@ -23,6 +23,16 @@ function Practice() {
   const [question, setQuestion] = useState({});
   const [questionList, setQuestionList] = useState([]);
 
+  const questionEndPoint =
+    process.env.REACT_APP_ENV === "prod"
+      ? process.env.REACT_APP_PROD_QUESTION_SERVICE_ENDPOINT
+      : process.env.REACT_APP_DEV_QUESTION_SERVICE_ENDPOINT;
+
+  const collabEndPoint =
+    process.env.REACT_APP_ENV === "prod"
+      ? process.env.REACT_APP_PROD_COLLAB_SERVICE_ENDPOINT
+      : process.env.REACT_APP_DEV_COLLAB_SERVICE_ENDPOINT;
+
   useEffect(() => {
     setUuid1(location.state?.uuid1);
     setUuid2(location.state?.uuid2);
@@ -34,7 +44,7 @@ function Practice() {
       for (let c of roomid) {
         if (!Number.isNaN(parseInt(c))) intSeed += parseInt(c);
       }
-      const request = `http://question-service-load-balancer-1091982636.ap-southeast-1.elb.amazonaws.com/questions?difficulty=${difficulty}&seed=${intSeed}`;
+      const request = `${questionEndPoint}/questions?difficulty=${difficulty}&seed=${intSeed}`;
       const question = await axios.get(request).catch((err) => {
         console.log("error fetching qn: ", location.state?.difficulty);
         console.log(err);
@@ -43,11 +53,7 @@ function Practice() {
     };
 
     const fetchAllQuestons = async () => {
-      let intSeed = 0;
-      for (let c of roomid) {
-        if (!Number.isNaN(parseInt(c))) intSeed += parseInt(c);
-      }
-      const request = `http://question-service-load-balancer-1091982636.ap-southeast-1.elb.amazonaws.com/allQuestions`;
+      const request = `${questionEndPoint}/allQuestions`;
       const questions = await axios.get(request).catch((err) => {
         console.log(err);
       });
@@ -61,13 +67,7 @@ function Practice() {
   }, [location.state, roomid, difficulty]);
 
   useEffect(() => {
-    const csEndpoint =
-      "collab-network-load-balancer-0122fd4415edad18.elb.ap-southeast-1.amazonaws.com";
-    setSocket(
-      io(
-        "collab-network-load-balancer-0122fd4415edad18.elb.ap-southeast-1.amazonaws.com"
-      )
-    );
+    setSocket(io(collabEndPoint));
   }, []);
 
   const handlePartnerChangeQuestion = (question) => {

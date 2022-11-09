@@ -1,4 +1,5 @@
 import * as React from "react";
+import Snackbar from "@mui/material/Snackbar";
 import { useState, useEffect, useContext } from "react";
 import Editor from "@monaco-editor/react";
 import "./CommonEditor.css";
@@ -19,7 +20,7 @@ const CommonEditor = ({
 }) => {
   const navigate = useNavigate();
   // Determine user and partner ID to use based on environment
-  const { $axios } = useContext(context);
+  const { $axios, user } = useContext(context);
 
   const [textValue, setTextValue] = useState("");
 
@@ -28,6 +29,8 @@ const CommonEditor = ({
   const [textChanged, setTextChanged] = useState(true);
   const [openLoadCodeModal, setOpenLoadCodeModal] = useState(false);
   const [loadedCode, setLoadedCode] = useState("");
+  const [snackbarContent, setSnackbarContent] = useState("");
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   useEffect(() => {
     if (!socket) return;
@@ -69,6 +72,8 @@ const CommonEditor = ({
       questionDifficulty: question.difficulty,
       code: textValue,
     });
+    setSnackbarContent("Code has been saved");
+    setSnackbarOpen(true);
     console.log("handleSave: ", {
       questionTitle: question.name,
       questionId: question._id,
@@ -87,15 +92,23 @@ const CommonEditor = ({
   };
 
   const handleRestoreCode = (code) => {
+    setSnackbarContent("Code has been restored");
+    setSnackbarOpen(true);
     handleChangeEmitted(code);
     setTextValue(code);
   };
 
   const handleCompleted = () => {
+    setSnackbarContent("Question attemped marked as Completed");
+    setSnackbarOpen(true);
     $axios.post(`${$axios.defaults.baseURL}/addQuestionAttempt`, {
       questionId: question._id,
       questionDifficulty: question.difficulty,
       questionTitle: question.name,
+    });
+    socket.emit("message", {
+      content: "Partner has marked attempt as completed",
+      email: user.email,
     });
     console.log("handleCompleted: ", {
       questionId: question._id,
@@ -106,6 +119,12 @@ const CommonEditor = ({
 
   return (
     <>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={() => setSnackbarOpen(false)}
+        message={snackbarContent}
+      />
       <PartnerLeftModal
         partnerLeave={partnerLeave}
         handleCompleted={handleCompleted}

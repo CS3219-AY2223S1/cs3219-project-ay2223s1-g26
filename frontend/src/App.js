@@ -16,7 +16,11 @@ import Practice from "./pages/Practice";
 function App() {
   const [user, loading, error] = useAuthState(auth);
   const [isLoading, setIsLoading] = React.useState(false);
-  const api = "http://localhost:5001/peerprep-userser/us-central1/api/api"
+
+  const api =
+    process.env.REACT_APP_ENV === "prod"
+      ? process.env.REACT_APP_PROD_USER_SERVICE_ENDPOINT
+      : process.env.REACT_APP_DEV_USER_SERVICE_ENDPOINT;
   const defaultOptions = {
     baseURL: api,
     headers: {

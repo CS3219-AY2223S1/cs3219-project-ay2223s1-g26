@@ -24,8 +24,12 @@ const ChangeQuestionModal = ({
     handleChangeQuestion(selectedQuestion);
   };
 
+  const handleCloseModal = () => {
+    setOpenChangeQuestionModal(false);
+  };
+
   return (
-    <Modal isOpen={openChangeQuestionModal}>
+    <Modal isOpen={openChangeQuestionModal} shouldCloseOnOverlayClick={true}>
       <div className="ChangeQuestionModalContainer">
         <h1 style={{ textAlign: "center" }}>
           Here is a list of questions you can choose from
@@ -39,6 +43,7 @@ const ChangeQuestionModal = ({
           questionProp={selectedQuestion}
           setQuestionProp={setSelectedQuestion}
           handleChangeQuestionButtonPress={handleChangeQuestionButtonPress}
+          handleCloseModal={handleCloseModal}
         />
         <ReactMarkdown
           className="markdownContainer"
