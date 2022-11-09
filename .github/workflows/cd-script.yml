@@ -98,7 +98,7 @@ jobs:
           push: true
           tags: ryantanlien99/peerprep:question-service
 
-  deploy_firebase:
+  deploy_user_service:
     if: github.event.pull_request.merged == true
     # Define environment (Below secrets are only defined in the environment and not globally)
     environment: cs3219-team-26
