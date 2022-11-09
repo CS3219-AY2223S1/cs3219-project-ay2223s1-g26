@@ -22,7 +22,7 @@ const PartnerLeftModal = ({
       boxSizing: "border-box",
     },
     content: {
-      margin: "20vh 30vw",
+      margin: "20vh 15vw",
       boxSizing: "border-box",
       display: "flex",
       flexDirection: "column",
